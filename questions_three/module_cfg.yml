@@ -1,0 +1,42 @@
+# Any value in this file can be overridden by setting an environment variable
+#   with the same name (case insensitive)
+
+
+# Name of the environment variable that our CI system populates with
+#  the workspace path.  Jenkins uses "WORKSPACE."
+ci_workspace_env_var: 'WORKSPACE'
+
+# Name of a file which enumerates reporter classes to activate
+#   Each line in this file should be a fully qualified <module>.<class>
+custom_reporters_file: null
+
+# Invoke these classes to report test events
+# For each class enumerated here, scaffolds will create an instance,
+#  discover its event handler methods, and subscribe each handler to
+#  the appropriate event.
+event_reporters: ArtifactSaver,EventLogger,JunitReporter,ResultCompiler
+
+# Proxy URLs for the HTTP Client
+http_proxy: null
+https_proxy: null
+
+# Set to False to disable cert verification
+https_verify_certs: True
+
+# Run at most this number of suites in parallel
+#  Setting this to "1" effectively serializes test execuction
+max_parallel_suites: 1
+
+# Tell the auto-discoverer where to find tests
+path_to_tests: .
+
+# Stick reports here
+reports_path: reports
+
+# If we're saving artifacts to S3, use this bucket
+s3_bucket_for_artifacts: null
+
+# Optional unique identifier for the entire test run (all suites)
+# EventBroker publishes it with all events so subscriber components like
+# reporters can group events for multiple suites in the same run together.
+test_run_id: 'local_test_run'
