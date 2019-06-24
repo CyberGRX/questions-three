@@ -4,21 +4,19 @@ import os
 from setuptools import find_packages, setup
 from setuptools.command.test import test
 from unittest import TestLoader
+from unittest.runner import TextTestRunner
 
 MAJOR_VERSION = 2
+# An even MINOR_VERSION number indicates a public release
 MINOR_VERSION = 2
-PATCH_VERSION = 3
+PATCH_VERSION = 4
 
 
 class Tester(test):
 
     def run_tests(self):
-        # If we perform this input at the top of the file, we get an
-        # import error because we need to load this file to discover
-        # dependencies.
-        from xmlrunner import XMLTestRunner
         tests = TestLoader().discover('tests', pattern='test_*.py')
-        runner = XMLTestRunner(output='reports')
+        runner = TextTestRunner()
         result = runner.run(tests)
         exit(0 if result.wasSuccessful() else 1)
 
@@ -48,7 +46,6 @@ setup(
         'requests>=2.18.4',  # required by HTTP Client
         'twin-sister>=4.2.6.0',  # required by unit tests
         'twine>=1.9.1',  # required by setup to upload package to Nexus
-        'unittest-xml-reporting>=2.1.1',  # required by setup
         'wheel>=0.30.0'  # required by setup to build package
         ],
     cmdclass={'test': Tester},

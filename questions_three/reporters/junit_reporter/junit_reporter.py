@@ -89,7 +89,7 @@ def infer_package_name():
         script_path = script_path.replace(cwd_mask, '')
     name = script_path.replace('/', '.') + '.'
     if name.startswith('.'):
-            name = name[1:]
+        name = name[1:]
     return name
 
 
