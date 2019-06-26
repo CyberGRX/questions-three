@@ -4,15 +4,18 @@ from xml.etree import ElementTree
 from expects import expect, contain, have_length
 from questions_three.constants import TestEvent
 from questions_three.event_broker import EventBroker, subscribe_event_handlers
-from twin_sister.expects_matchers import contain_key_with_value
 from questions_three.reporters.junit_reporter import JunitReporter
 from questions_three.reporters.result_compiler import ResultCompiler
 from questions_three.vanilla import format_exception
+from twin_sister import close_all_dependency_contexts
+from twin_sister.expects_matchers import contain_key_with_value
 
 
-class TestDummyTestForSuiteErr(TestCase):
+class TestTestForSuiteSetup(TestCase):
 
     def setUp(self):
+        close_all_dependency_contexts()
+        EventBroker.reset()
         subscribe_event_handlers(self)
         self.suite_name = 'EarElephant'
         self.xml_report = None
@@ -31,6 +34,7 @@ class TestDummyTestForSuiteErr(TestCase):
         self.xml_report = report_content
 
     def extract_dummy_test(self):
+        assert self.xml_report, 'No report was generated'
         doc = ElementTree.fromstring(self.xml_report)
         tests = doc.findall(".//testcase")
         expect(tests).to(have_length(1))

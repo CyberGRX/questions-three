@@ -1,13 +1,12 @@
 from unittest import TestCase, main
 
-from expects import expect
-import junit_xml
+from expects import expect, be_empty
 
 from questions_three.constants import TestEvent
 from questions_three.event_broker import EventBroker
 from twin_sister.expects_matchers import contain_key_with_value
 from questions_three.reporters.junit_reporter.junit_reporter import \
-    JunitReporter, convert_tests
+    JunitReporter
 from questions_three.reporters.result_compiler.suite_results \
     import SuiteResults, TestResult
 
@@ -51,12 +50,7 @@ class TestReportPublishing(TestCase):
 
     def test_publishes_report_content(self):
         self.publish_results()
-        suite = junit_xml.TestSuite(
-            name=self.suite_name,
-            test_cases=convert_tests(self.results.tests))
-        expected = junit_xml.TestSuite.to_xml_string([suite])
-        expect(self.published_kwargs).to(
-            contain_key_with_value('report_content', expected))
+        expect(self.published_kwargs['report_content']).not_to(be_empty)
 
 
 if '__main__' == __name__:

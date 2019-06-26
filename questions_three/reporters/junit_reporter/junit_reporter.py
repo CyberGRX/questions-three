@@ -2,6 +2,7 @@ from datetime import datetime
 from junit_xml import TestCase, TestSuite
 import os
 from twin_sister import dependency
+from xml.etree import ElementTree
 
 from questions_three.constants import TestEvent, TestStatus
 from questions_three.event_broker import EventBroker, subscribe_event_handlers
@@ -119,7 +120,11 @@ class JunitReporter:
             name=infer_package_name() + suite_name,
             timestamp=current_time().isoformat(),
             test_cases=test_cases)
+        xml_report = ElementTree.tostring(
+            suite.build_xml_doc(), encoding='utf-8')
         EventBroker.publish(
             event=TestEvent.report_created,
+            suite=suite,
+            cases=test_cases,
             report_filename=suite_name + '.xml',
-            report_content=TestSuite.to_xml_string([suite]))
+            report_content=xml_report)
