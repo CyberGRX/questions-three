@@ -121,7 +121,7 @@ class JunitReporter:
             timestamp=current_time().isoformat(),
             test_cases=test_cases)
         xml_report = ElementTree.tostring(
-            suite.build_xml_doc(), encoding='utf-8')
+            suite.build_xml_doc(), encoding='utf-8').decode(encoding='utf-8')
         EventBroker.publish(
             event=TestEvent.report_created,
             suite=suite,

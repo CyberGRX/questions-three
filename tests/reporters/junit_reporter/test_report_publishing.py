@@ -1,6 +1,6 @@
 from unittest import TestCase, main
 
-from expects import expect, be_empty
+from expects import expect, be_a, be_empty
 
 from questions_three.constants import TestEvent
 from questions_three.event_broker import EventBroker
@@ -50,7 +50,9 @@ class TestReportPublishing(TestCase):
 
     def test_publishes_report_content(self):
         self.publish_results()
-        expect(self.published_kwargs['report_content']).not_to(be_empty)
+        content = self.published_kwargs['report_content']
+        expect(content).to(be_a(str))
+        expect(content).not_to(be_empty)
 
 
 if '__main__' == __name__:
