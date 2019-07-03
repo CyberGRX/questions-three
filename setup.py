@@ -9,7 +9,7 @@ from unittest.runner import TextTestRunner
 MAJOR_VERSION = 2
 # An even MINOR_VERSION number indicates a public release
 MINOR_VERSION = 2
-PATCH_VERSION = 6
+PATCH_VERSION = 7
 
 
 class Tester(test):
@@ -35,7 +35,7 @@ setup(
     author='Mike Duskis',
     author_email='mike.duskis@cybergrx.com',
     packages=find_packages(exclude=('tests.*', 'tests')),
-    url='https://git.dev.grx.io/Testing/questions-three',
+    url='https://github.com/CyberGRX/questions-three',
     install_requires=[
         'boto3>=1.9.146',  # required to save artifacts to s3
         'expects>=0.8.0',  # required by unit tests
