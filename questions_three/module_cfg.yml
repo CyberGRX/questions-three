@@ -20,6 +20,10 @@ event_reporters: ArtifactSaver,EventLogger,JunitReporter,ResultCompiler
 http_proxy: null
 https_proxy: null
 
+# Stop waiting for an HTTP response after this number of seconds.
+#   If null, wait forever
+http_client_socket_timeout: null
+
 # Set to False to disable cert verification
 https_verify_certs: True
 

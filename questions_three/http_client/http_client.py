@@ -70,7 +70,7 @@ class HttpClient:
         if self._proxies and 'proxies' not in kwargs.keys():
             kwargs['proxies'] = self._proxies
         func = getattr(dependency(requests), method)
-        return func(*args, **kwargs)
+        return func(*args, timeout=self._socket_timeout(), **kwargs)
 
     def _send_session_request(
             self, method, url, *, verify, proxies=None, **kwargs):
@@ -78,7 +78,8 @@ class HttpClient:
         prepped = self._session.prepare_request(request)
         return self._session.send(
             prepped, allow_redirects=False, verify=verify,
-            proxies=proxies or self._proxies)
+            proxies=proxies or self._proxies,
+            timeout=self._socket_timeout())
 
     @staticmethod
     def _check_request_kwargs(kwargs):
@@ -86,6 +87,17 @@ class HttpClient:
             raise NotImplementedError(
                 'I do not support "json" because I am a transport component. '
                 'Consider specifying "data=json.dumps(thing)" instead.')
+
+    def _socket_timeout(self):
+        config = config_for_module(__name__)
+        timeout = config.http_client_socket_timeout
+        if timeout is not None:
+            try:
+                timeout = float(timeout)
+            except ValueError as e:
+                raise TypeError(
+                    'expected $CLIENT_SOCKET_TIMEOUT to be a number') from e
+        return timeout
 
     def _request(
             self, method, url, *args, data=None, headers={},
