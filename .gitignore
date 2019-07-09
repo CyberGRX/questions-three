@@ -5,4 +5,5 @@ dist/*
 reports/*
 .eggs
 .idea
+.vscode
 
