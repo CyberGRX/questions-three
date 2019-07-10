@@ -91,12 +91,16 @@ class HttpClient:
     def _socket_timeout(self):
         config = config_for_module(__name__)
         timeout = config.http_client_socket_timeout
+        if timeout == '':
+            timeout = None
         if timeout is not None:
             try:
                 timeout = float(timeout)
             except ValueError as e:
                 raise TypeError(
-                    'expected $CLIENT_SOCKET_TIMEOUT to be a number') from e
+                    'expected $CLIENT_SOCKET_TIMEOUT '
+                    f'("{timeout}") to be a number'
+                    ) from e
         return timeout
 
     def _request(

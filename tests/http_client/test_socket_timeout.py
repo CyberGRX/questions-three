@@ -32,6 +32,11 @@ class TestSocketTimeout(TestCase):
         HttpClient().get('http://stuff')
         expect(self.get_spy['timeout']).to(equal(None))
 
+    def test_does_not_set_timeout_if_empty_string(self):
+        self.context.set_env(HTTP_CLIENT_SOCKET_TIMEOUT='')
+        HttpClient().get('http://stuff')
+        expect(self.get_spy['timeout']).to(equal(None))
+
     def test_sends_configured_timeout_for_plain_request(self):
         planted = 94.7
         self.context.set_env(HTTP_CLIENT_SOCKET_TIMEOUT=planted)
