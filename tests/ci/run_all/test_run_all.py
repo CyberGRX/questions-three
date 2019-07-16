@@ -2,73 +2,16 @@ from datetime import datetime, timedelta
 from functools import partial
 from io import StringIO
 import os
-import re
 from subprocess import PIPE, Popen, STDOUT
 import sys
-from threading import Thread
 from time import sleep
 from unittest import TestCase, main
 
 from expects import expect, be_empty, contain, equal, have_length
 from twin_sister import open_dependency_context
 
-from questions_three.ci.run_all.run_all import queue_throttle
 from questions_three.ci import run_all
 from twin_sister.expects_matchers import contain_key_with_value
-from questions_three.logging import logger_for_module
-from twin_sister.fakes import EmptyFake
-
-
-class ContextThread(Thread):
-
-    def __init__(self, *args, context, target, **kwargs):
-        self._attached = False
-        self._context = context
-        self._context_target = target
-        super().__init__(*args, daemon=True, target=self._wait, **kwargs)
-
-    def _attach(self):
-        while self.ident is None:
-            pass
-        self._context.attach_to_thread(self)
-        self._attached = True
-
-    def _wait(self):
-        while not self._attached:
-            pass
-
-    def run(self):
-        target = self._context_target
-        attacher = Thread(target=self._attach, daemon=True)
-        attacher.start()
-        super().run()
-        target()
-
-
-class FakeFiles(EmptyFake):
-
-    def __init__(self):
-        self._structure = {}
-
-    def add(self, filename):
-        path, fn = os.path.split(filename)
-        if path not in self._structure:
-            self._structure[path] = {'dirs': [], 'files': []}
-        self._structure[path]['files'].append(fn)
-
-    @staticmethod
-    def _strip_path(filename, path):
-        pat = re.compile(r'^%s/?(.*)$' % path)
-        mat = pat.search(filename)
-        if not mat:
-            raise RuntimeError('Failed to parse "%s"' % filename)
-        return mat.group(1)
-
-    def walk(self, top, **kwargs):
-        return [
-            (path, tuple(node['dirs']), tuple(node['files']))
-            for path, node in self._structure.items()
-            if path.startswith(top)]
 
 
 class FakeStream(StringIO):
@@ -145,43 +88,27 @@ class FakePopenClass:
             for c in self.opened]
 
 
-class LogSpy(EmptyFake):
-    def __init__(self):
-        self.logged = ''
-
-    def debug(self, msg):
-        self.logged += msg
-
-    info = debug
-    warning = debug
-    error = debug
-
-
 class TestRunAll(TestCase):
 
     def setUp(self):
         self.context = open_dependency_context(
-            supply_env=True, supply_logging=True)
-        self.context.inject(sys.stdout, EmptyFake())
-        self.context.inject(queue_throttle, lambda: None)
-        self.files = FakeFiles()
-        self.context.inject(os.walk, self.files.walk)
+            supply_fs=True, supply_env=True, supply_logging=True)
+        self.context.set_env(
+            DELAY_BETWEEN_CHECKS_FOR_PARALLEL_SUITE_COMPLETION=0,
+            MAX_PARALLEL_SUITES=5)
         self.popen_class = FakePopenClass()
         self.context.inject(Popen, self.popen_class)
-        self.env = {
-            'max_parallel_suites': '5'  # arbitrary default
-        }
-        self.context.os.environ = self.env
 
     def tearDown(self):
         self.context.close()
 
     def fake_file(self, filename):
-        self.files.add(filename)
+        self.context.create_file(filename, content='')
 
     def test_runs_python_script_buried_in_specified_directory(self):
         path = 'spinach'
-        filename = os.path.join(path, 'spam', 'eggs', 'sausage.py')
+        filename = self.context.os.path.join(
+            path, 'spam', 'eggs', 'sausage.py')
         self.fake_file(filename=filename)
         run_all(path)
         expect(self.popen_class.scripts_executed()).to(contain(filename))
@@ -224,8 +151,8 @@ class TestRunAll(TestCase):
         self.fake_file(second_script)
         p2 = FakePopen(complete=False)
         self.popen_class.canned_objects[second_script] = p2
-        t = ContextThread(
-            context=self.context, target=partial(run_all, path))
+        t = self.context.create_time_controller(
+            target=partial(run_all, path))
         t.start()
         expiry = datetime.now() + timedelta(seconds=0.1)
         while not(
@@ -242,7 +169,7 @@ class TestRunAll(TestCase):
             t.join()
 
     def set_limit(self, limit):
-        self.env['max_parallel_suites'] = str(limit)
+        self.context.set_env(MAX_PARALLEL_SUITES=limit)
 
     def test_limits_process_count_to_config(self):
         path = 'my_test_suites'
@@ -255,8 +182,7 @@ class TestRunAll(TestCase):
         for filename, proc in procs.items():
             self.fake_file(filename)
             self.popen_class.canned_objects[filename] = proc
-        t = ContextThread(
-            context=self.context, target=partial(run_all, path))
+        t = self.context.create_time_controller(target=partial(run_all, path))
         t.start()
         sleep(0.1)
         running = 0
@@ -281,8 +207,7 @@ class TestRunAll(TestCase):
         p2 = FakePopen(complete=False)
         self.fake_file(script2)
         self.popen_class.canned_objects[script2] = p2
-        t = ContextThread(
-            context=self.context, target=partial(run_all, path))
+        t = self.context.create_time_controller(target=partial(run_all, path))
         t.start()
         sleep(0.1)
         try:
@@ -352,7 +277,7 @@ class TestRunAll(TestCase):
         filename = os.path.join(path, 'something.py')
         self.fake_file(filename)
         self.popen_class.canned_objects[filename] = proc
-        t = ContextThread(context=self.context, target=partial(run_all, path))
+        t = self.context.create_time_controller(target=partial(run_all, path))
         t.start()
         sleep(0.05)
         proc.fake_stdout(expected)
@@ -368,7 +293,7 @@ class TestRunAll(TestCase):
         filename = os.path.join(path, 'spamthing.py')
         self.fake_file(filename)
         self.popen_class.canned_objects[filename] = proc
-        t = ContextThread(context=self.context, target=partial(run_all, path))
+        t = self.context.create_time_controller(target=partial(run_all, path))
         t.start()
         sleep(0.1)
         try:
@@ -378,18 +303,17 @@ class TestRunAll(TestCase):
             t.join()
 
     def test_logs_script_name_on_start(self):
-        spy = LogSpy()
-        self.context.inject(logger_for_module, lambda name: spy)
         path = 'the'
         filename = os.path.join(path, 'rainbow.py')
         self.fake_file(filename)
         proc = FakePopen(complete=False)
         self.popen_class.canned_objects[filename] = proc
-        t = ContextThread(context=self.context, target=partial(run_all, path))
+        t = self.context.create_time_controller(target=partial(run_all, path))
         t.start()
         sleep(0.1)
+        messages = [rec.msg for rec in self.context.logging.stored_records]
         try:
-            expect(spy.logged).to(contain('Executing %s\n' % filename))
+            expect(messages).to(contain('Executing %s\n' % filename))
         finally:
             proc.complete()
             t.join()

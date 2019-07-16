@@ -10,6 +10,10 @@ ci_workspace_env_var: 'WORKSPACE'
 #   Each line in this file should be a fully qualified <module>.<class>
 custom_reporters_file: null
 
+# When multiple suites are running in parallel, wait this number of
+#   seconds between checks to see how many have finished
+delay_between_checks_for_parallel_suite_completion: 3
+
 # Invoke these classes to report test events
 # For each class enumerated here, scaffolds will create an instance,
 #  discover its event handler methods, and subscribe each handler to
@@ -36,6 +40,10 @@ path_to_tests: .
 
 # Stick reports here
 reports_path: reports
+
+# Stop discovering and running tests after this number of seconds.
+#   If null, run forever
+run_all_timeout: null
 
 # If we're saving artifacts to S3, use this bucket
 s3_bucket_for_artifacts: null
