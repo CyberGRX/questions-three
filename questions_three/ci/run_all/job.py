@@ -39,6 +39,9 @@ class Job:
             stderr=STDOUT, stdout=PIPE)
         self._last_flush = now()
 
+    def kill(self):
+        self._proc.kill()
+
     def poll(self):
         """
         Flush output if necessary.
