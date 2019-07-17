@@ -75,6 +75,16 @@ class TestRedirection(TestCase):
         expect(self.spies.get.kwargs_from_last_call()).to(
             have_keys(data=data))
 
+    def test_repeats_arbitrary_keyword_arguments(self):
+        planted = {
+            'slogan': 'Nobody rejects the Spinach Imposition!',
+            'weapons': ['surprise', 'fear', 'ruthless efficiency']}
+        self.queue_response(status_code=301, location='http://ratses')
+        self.queue_response(status_code=200)
+        HttpClient().get('something', **planted)
+        expect(self.spies.get.kwargs_from_last_call()).to(
+            have_keys(**planted))
+
     def check_follows_absolute_location(self, status_code):
         location = 'https://somewhere.else/spam?eggs#sausage'
         self.queue_response(status_code=status_code, location=location)
