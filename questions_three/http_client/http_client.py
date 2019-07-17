@@ -104,7 +104,7 @@ class HttpClient:
         return timeout
 
     def _request(
-            self, method, url, *args, headers={},
+            self, method, url, headers={},
             redirect_depth=0, **kwargs):
         self._check_request_kwargs(kwargs)
         headers = dict(self._persistent_headers, **headers)
@@ -116,7 +116,7 @@ class HttpClient:
         else:
             func = self._send_session_request
         resp = func(
-            method, url, *args, headers=headers, verify=self._verify_certs,
+            method, url, headers=headers, verify=self._verify_certs,
             **kwargs)
         self._logger.debug('HTTP %d\n%s' % (resp.status_code, resp.text))
         self._transcript.add_response(resp)
