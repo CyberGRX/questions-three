@@ -104,20 +104,20 @@ class HttpClient:
         return timeout
 
     def _request(
-            self, method, url, *args, data=None, headers={},
+            self, method, url, *args, headers={},
             redirect_depth=0, **kwargs):
         self._check_request_kwargs(kwargs)
         headers = dict(self._persistent_headers, **headers)
         self._transcript.add_request(
-            method, url, data=data, headers=headers, **kwargs)
+            method, url, headers=headers, **kwargs)
         self._logger.debug('%s %s' % (method.upper(), url))
         if self._session is None:
             func = self._send_plain_request
         else:
             func = self._send_session_request
         resp = func(
-            method, url, *args, data=data, headers=headers,
-            verify=self._verify_certs, **kwargs)
+            method, url, *args, headers=headers, verify=self._verify_certs,
+            **kwargs)
         self._logger.debug('HTTP %d\n%s' % (resp.status_code, resp.text))
         self._transcript.add_response(resp)
         if resp.status_code in HANDLE_THESE_REDIRECT_STATUS_CODES:
@@ -129,7 +129,7 @@ class HttpClient:
                 construct_redirect_url(
                     request_url=url,
                     response_location_header=extract_location_header(resp)),
-                headers=headers, data=data, redirect_depth=redirect_depth+1)
+                headers=headers, redirect_depth=redirect_depth+1, **kwargs)
         inspect_response(resp)
         return resp
 
