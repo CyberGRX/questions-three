@@ -9,7 +9,7 @@ from unittest.runner import TextTestRunner
 MAJOR_VERSION = 2
 # An even MINOR_VERSION number indicates a public release
 MINOR_VERSION = 6
-PATCH_VERSION = 2
+PATCH_VERSION = 3
 
 
 class Tester(test):
@@ -37,7 +37,8 @@ setup(
     packages=find_packages(exclude=('tests.*', 'tests')),
     url='https://github.com/CyberGRX/questions-three',
     install_requires=[
-        'boto3>=1.9.146',  # required to save artifacts to s3
+        'boto3==1.9.192',  # required to save artifacts to s3
+        'botocore==1.12.192', # temporarily fixed the version of this and boto3 to work around https://github.com/boto/botocore/issues/1789
         'expects>=0.8.0',  # required by unit tests
         'pyfakefs>=3.4.3',  # required by unit tests
         'PyYAML>=5.1',  # required by ModuleConfig
