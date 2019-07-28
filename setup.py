@@ -27,14 +27,25 @@ def build_number():
     return 0
 
 
+with open('README.md', 'r') as f:
+    long_description = f.read()
+
 setup(
     author='Mike Duskis',
     author_email='mike.duskis@cybergrx.com',
+    classifiers=[
+        'Development Status :: 5 - Production/Stable',
+        'Intended Audience :: Developers',
+        'License :: OSI Approved :: MIT License',
+        'Natural Language :: English',
+        'Operating System :: OS Independent',
+        'Programming Language :: Python :: 3',
+        'Topic :: Software Development :: Testing'],
     cmdclass={'test': Tester},
-    description='Fundamental components of an automated test platform',
+    description='Toolkit for building automated integration checks',
     install_requires=[
         'boto3==1.9.192',  # required to save artifacts to s3
-        'botocore==1.12.192', # temporarily fixed the version of this and boto3 to work around https://github.com/boto/botocore/issues/1789
+        'botocore==1.12.192',  # temporarily fixed the version of this and boto3 to work around https://github.com/boto/botocore/issues/1789
         'expects>=0.8.0',  # required by unit tests
         'junit-xml>=1.8',  # required by junit reporter
         'lxml>=4.1.1',  # required by html_form
@@ -45,6 +56,8 @@ setup(
         'twine>=1.9.1',  # required by setup to upload package to Nexus
         'wheel>=0.30.0'  # required by setup to build package
         ],
+    long_description=long_description,
+    long_description_content_type='text/markdown',
     name='questions-three',
     package_data={
         'questions_three': ['module_cfg.yml'],
