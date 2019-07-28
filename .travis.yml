@@ -5,3 +5,11 @@ python:
 script:
 - python3 setup.py test
 - python3 setup.py sdist bdist_wheel
+deploy:
+  provider: pypi
+  on:
+    branch: master
+    tags: true
+  user: cybergrx
+  password:
+    secure: wmT3bVAY/u/3ZM2fsLNITAedLoZ56zOE0eVhqyCLueN1QeKpQBT9HSvP2bjeVkZ3f3XP9NT6YO4Tm7aXtA+/LPom4d/zo6rSW8MTL4ZMjkh8zboyVm9TGP4Xv6pwA+gNf01yfyt1WV4JrICREljlMyE+m+ScgldRxmJLILWz15q9W7RztRA7RtxJDxqa9uTlKpjs0qv6LyxysjYRuAAnGEYJ2DZBg0HXEVf1T3XpH6JmWKI2DRCf818DvLiEG9ZPoOk+slxuupMoy+a5V1Du5gDfwZJoZ6C1mHSyf3/1Ai6NXkLse0aaIIoIqWhacz3z1rfJOUXL1EL5dluelUhW4lv3mgvnFKFMqTwQFM2jZrK5kCYh5fo/msvAKnSJCu6ZflsW8mnZYGSY91TgUaYZIvhUDkheYU/lSp6Gaw+aLOnd6FptXFEPQrh0wgzFB1et7rq96EDH0zHw7sNttYvtpSNhp/vOBOsU0iAUgnttjOWaICcnkuDwxFQN6gPUx34RgfabfNKTjsfOccFJK6CPOS2TmzlBF2FRjJ/v52A83qq/d8Bmmo34NAqR3RhVUMBEs/4x8ykAd34InqggISvxqA+UdRzvrPXalfTwHgls9mS+nej9VgIvOv5KYcYKfEr+sbGeuPTErBAC8TnxP9HWv9TeK4DHhR//fegSRkdes/s=
