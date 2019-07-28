@@ -28,29 +28,30 @@ def build_number():
 
 
 setup(
-    name='questions-three',
-    version='%d.%d.%d.%d' % (
-        MAJOR_VERSION, MINOR_VERSION, PATCH_VERSION, build_number()),
-    description='Fundamental components of an automated test platform',
     author='Mike Duskis',
     author_email='mike.duskis@cybergrx.com',
-    packages=find_packages(exclude=('tests.*', 'tests')),
-    url='https://github.com/CyberGRX/questions-three',
+    cmdclass={'test': Tester},
+    description='Fundamental components of an automated test platform',
     install_requires=[
         'boto3==1.9.192',  # required to save artifacts to s3
         'botocore==1.12.192', # temporarily fixed the version of this and boto3 to work around https://github.com/boto/botocore/issues/1789
         'expects>=0.8.0',  # required by unit tests
-        'pyfakefs>=3.4.3',  # required by unit tests
-        'PyYAML>=5.1',  # required by ModuleConfig
         'junit-xml>=1.8',  # required by junit reporter
         'lxml>=4.1.1',  # required by html_form
+        'PyYAML>=5.1',  # required by ModuleConfig
+        'pyfakefs>=3.4.3',  # required by unit tests
         'requests>=2.18.4',  # required by HTTP Client
         'twin-sister>=4.2.6.0',  # required by unit tests
         'twine>=1.9.1',  # required by setup to upload package to Nexus
         'wheel>=0.30.0'  # required by setup to build package
         ],
-    cmdclass={'test': Tester},
+    name='questions-three',
     package_data={
         'questions_three': ['module_cfg.yml'],
         'questions_three.webdriver_tools.dom_dumper': ['dump_dom.js']
-        })
+        },
+    packages=find_packages(exclude=('tests.*', 'tests')),
+    url='https://github.com/CyberGRX/questions-three',
+    version='%d.%d.%d.%d' % (
+        MAJOR_VERSION, MINOR_VERSION, PATCH_VERSION, build_number()),
+        )
