@@ -12,6 +12,16 @@ def flatten(obj):
     return obj
 
 
+def to_json_serializable(obj):
+    if hasattr(obj, 'items'):
+        return {k: to_json_serializable(v) for k, v in obj.items()}
+    if isinstance(obj, list):
+        return [to_json_serializable(i) for i in obj]
+    if type(obj) in (int, float, complex):
+        return obj
+    return(str(obj))
+
+
 class Structure(Mapping):
     """
     Structure of nested key/value pairs, accessible as attributes.
@@ -102,7 +112,10 @@ class Structure(Mapping):
 
     def to_json(self):
         try:
-            return json.dumps(self.to_dict())
+            return json.dumps(
+                {
+                    k: to_json_serializable(v)
+                    for k, v in self.to_dict().items()})
         except TypeError as e:
             raise TypeError('%s\n%s' % (e, repr(self))) from e
 

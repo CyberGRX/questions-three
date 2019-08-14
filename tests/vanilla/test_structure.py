@@ -1,3 +1,4 @@
+from enum import Enum
 import json
 from unittest import TestCase, main
 
@@ -162,6 +163,12 @@ class TestStructure(TestCase):
 
     def test_structure_is_not_equal_to_object_without_keys(self):
         expect(Structure()).not_to(equal([]))
+
+    def test_handles_enums_in_json_transformation(self):
+        Thing = Enum('Thing', 'one two')
+        s = Structure(thing=Thing.one)
+        expect(s.to_json()).to(
+            equal('{"thing": "Thing.one"}'))
 
 
 if '__main__' == __name__:
