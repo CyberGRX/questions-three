@@ -34,7 +34,6 @@ def logger_for_module(module_name):
       <module_name.upper()>_LOG_LEVEL=<DEBUG | INFO | WARNING | ERROR>
 
     module_name -- (str)  Name of the module
-    environ -- (dict) Use this instead of os.environ
     """
     environ = dependency(os).environ
     handler = dependency(logging).StreamHandler()
