@@ -9,9 +9,15 @@ from questions_three.vanilla import format_exception
 
 
 def call_if_alive(ref, **kwargs):
+    log = logger_for_module(__name__)
     func = ref()
     if func:
-        func(**kwargs)
+        log.debug(f'Executing {func}')
+        try:
+            func(**kwargs)
+            log.debug(f'{func} exited cleanly')
+        except Exception as e:
+            log.error(format_exception(e))
 
 
 def current_time():
@@ -37,23 +43,20 @@ class EventBroker:
     @classmethod
     def publish(cls, *, event, event_time=None, **kwargs):
         conf = config_for_module(__name__)
+        log = logger_for_module(__name__)
         run_id = conf.test_run_id
         if event_time is None:
             event_time = current_time()
-        cls._logger.debug(event)
+        log.debug(event)
         if event in cls._subscribers.keys():
             for subscriber in cls._subscribers[event]:
-                try:
-                    call_if_alive(
-                        subscriber, event_time=event_time,
-                        run_id=run_id, **kwargs)
-                except Exception as e:
-                    cls._logger.error(format_exception(e))
+                call_if_alive(
+                    subscriber, event_time=event_time,
+                    run_id=run_id, **kwargs)
 
     @classmethod
     def reset(cls):
         cls._subscribers = {}  # event -> [subscribers]
-        cls._logger = logger_for_module(__name__)
 
     @classmethod
     def subscribe(cls, *, event, func):
