@@ -9,7 +9,7 @@ from unittest.runner import TextTestRunner
 MAJOR_VERSION = 2
 # An even MINOR_VERSION number indicates a public release
 MINOR_VERSION = 8
-PATCH_VERSION = 3
+PATCH_VERSION = 4
 
 
 class Tester(test):
@@ -44,8 +44,7 @@ setup(
     cmdclass={'test': Tester},
     description='Toolkit for building automated integration checks',
     install_requires=[
-        'boto3==1.9.192',  # required to save artifacts to s3
-        'botocore==1.12.192',  # temporarily fixed the version of this and boto3 to work around https://github.com/boto/botocore/issues/1789
+        'boto3>=1.10.4',  # required to save artifacts to s3
 	'docutils<0.15,>=0.10', #  part of the temporary work-around for botocore issue 1789
         'expects>=0.8.0',  # required by unit tests
         'junit-xml>=1.8',  # required by junit reporter
