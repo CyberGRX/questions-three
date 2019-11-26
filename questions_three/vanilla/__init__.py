@@ -1,3 +1,4 @@
+from .b16encode_str import b16encode_str  # noqa: F401
 from .call_with_exception_tolerance import call_with_exception_tolerance  # noqa
 from .func_that_raises import func_that_raises  # noqa: F401
 from .format_exception import format_exception  # noqa: F401
