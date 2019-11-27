@@ -8,7 +8,7 @@ from unittest.runner import TextTestRunner
 
 MAJOR_VERSION = 2
 # An even MINOR_VERSION number indicates a public release
-MINOR_VERSION = 9
+MINOR_VERSION = 10
 PATCH_VERSION = 0
 
 
