@@ -46,5 +46,6 @@ setup(
         ],
     cmdclass={'test': Tester},
     package_data={
-        'selenium': ['module_cfg.yml'],
+        'questions_three_selenium': ['module_cfg.yml'],
+        'questions_three_selenium.dom_dumper': ['dump_dom.js']
         })
