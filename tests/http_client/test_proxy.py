@@ -1,4 +1,3 @@
-import os
 from unittest import TestCase, main
 
 from expects import expect
