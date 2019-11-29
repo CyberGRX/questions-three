@@ -7,8 +7,8 @@ from twin_sister import open_dependency_context
 
 from questions_three.constants import TestEvent
 from questions_three.event_broker import EventBroker
-from questions_three.reporters.s3_artifact_saver import S3ArtifactSaver
-from twin_sister.fakes import EmptyFake
+from questions_three_aws.s3_artifact_saver import S3ArtifactSaver
+from twin_sister.fakes import EndlessFake
 
 
 def publish_artifact(artifact='spam', **kwargs):
@@ -36,13 +36,13 @@ class FunctionSpy():
         return self.kwargs[name]
 
 
-class BotoStub(EmptyFake):
+class BotoStub(EndlessFake):
 
     def __init__(self):
         self.s3_put_object_spy = FunctionSpy()
 
     def client(self, service_name):
-        client = EmptyFake()
+        client = EndlessFake()
         if 's3' == service_name:
             client.put_object = self.s3_put_object_spy
         return client

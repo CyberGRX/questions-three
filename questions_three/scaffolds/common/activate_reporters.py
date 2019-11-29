@@ -9,11 +9,10 @@ from questions_three.reporters.artifact_saver import ArtifactSaver
 from questions_three.reporters.event_logger import EventLogger
 from questions_three.reporters.junit_reporter import JunitReporter
 from questions_three.reporters.result_compiler import ResultCompiler
-from questions_three.reporters.s3_artifact_saver import S3ArtifactSaver
 
 
 BUILT_IN_REPORTERS = (
-    ArtifactSaver, EventLogger, JunitReporter, ResultCompiler, S3ArtifactSaver)
+    ArtifactSaver, EventLogger, JunitReporter, ResultCompiler)
 
 _active_reporters = []
 

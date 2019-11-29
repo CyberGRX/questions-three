@@ -45,9 +45,6 @@ reports_path: reports
 #   If null, run forever
 run_all_timeout: null
 
-# If we're saving artifacts to S3, use this bucket
-s3_bucket_for_artifacts: null
-
 # Optional unique identifier for the entire test run (all suites)
 # EventBroker publishes it with all events so subscriber components like
 # reporters can group events for multiple suites in the same run together.
