@@ -1,0 +1,50 @@
+# ====================
+#   Browser
+# ====================
+
+# local | browserstack | selenium_grid
+browser_location: local
+
+# Name of the browser to use
+use_browser: Chrome
+# Request this browser version (ignored if the browser is local)
+use_browser_version: null
+
+browserstack_access_key: null
+browserstack_os: Windows
+browserstack_os_version: '10'
+browserstack_screen_resolution: '1920x1080'
+browserstack_set_debug: false
+# If true, set the BrowserStack "local" (pseudo-VPN) option
+browserstack_set_local: true
+# Where to find the zipped BrowserStack local binary
+browserstack_local_binary_zip_url: https://www.browserstack.com/browserstack-local/BrowserStackLocal-linux-x64.zip
+# Where to store the BrowserStack local binary
+browserstack_local_binary: /tmp/browserstack_tunnel/BrowserStackLocal
+# Wait up to this number of seconds for BrowserStack "local" to be available
+browserstack_tunnel_timeout: 30
+browserstack_url: http://hub.browserstack.com/wd/hub
+browserstack_username: null
+
+# Change the user agent string in Chrome to this (if not null)
+chrome_user_agent: null
+
+selenium_grid_hub_url: null
+
+
+# =======================
+# Tuning and tolerances
+# =======================
+
+# Wait up to this number of seconds for a new browser to become available
+browser_availability_timeout: 180.0
+# Delay this number of seconds between requests for a new browser
+browser_availability_throttle: 30.0
+browser_element_find_timeout: 10.0
+browser_page_load_timeout: 60.0
+
+
+# ===================
+# Debugging
+# ===================
+suppress_browser_exit_on_failure: False
