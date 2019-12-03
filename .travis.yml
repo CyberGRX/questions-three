@@ -9,7 +9,8 @@ script:
   - bash build_packages.sh
 deploy:
   provider: script
-  script: bash deploy_packages.sh
+  script:
+    - bash deploy_packages.sh
   skip_cleanup: true
   on:
     tags: true
