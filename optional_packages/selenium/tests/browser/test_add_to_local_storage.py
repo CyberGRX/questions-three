@@ -4,7 +4,7 @@ from expects import expect, equal
 from selenium import webdriver
 from twin_sister import open_dependency_context
 
-from questions_three_selenium.browser import Browser
+from questions_three_selenium import Browser
 
 
 class FakeWebdriver:
