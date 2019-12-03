@@ -2,13 +2,11 @@ dist: xenial
 language: python
 python:
 - '3.7'
-script:
-- bash build_packages.sh
+env:
+  global:
+    secure: giL+o9KwnIu8adBn8TIc5jhW75T7i4xKWhxQ572TY7dRSY4tPh3Yu3NeZYhzwPqjx+bUd0nr7O/+FQcW+GMvGjkIztEg1ytFr/uY0GsRHbJ9971mJ0ftpQW01N9OhQ2AfO7NS5IGtuTqx2WY6fz8kP0WitTu8wDwZM1BFllRmaqhepfFl7z6I0ur/AOvMhvfKMOqt/rfAO5f6CXRzbuuMwY0PHkJ/N3+243lfvtWpv1EfM/LoW5QpAq86yf/RVNL4LfMoUQIW0nOAI9Mbx7By+0G8wqQqqBZDXyacbZPZdKGkDF03L8ynN2pCkkVTOMfPEwtKCaNOKp9sPJa7VKg6VWwSiA7NcvoUXzgYbacFnlqRW0k0RZXs5wALaizAdDc5WdftzJBDZ85ir8ml+cW+EHzvKdthDzw5XZIRuSNE+Yzyv9fryhOtdU5XjtAzQOuHE/J7Npp1DM3n57ev5E/FNKrUKP/VfC83H2jDEqWsAFBSKo8+6LPXYweeLkrsDdA7H9UXg02dxIUMK1MmqtDBnbiiE3lbDty4SXpQ1pCWnTUHmyP4aqqvmDZCbTIvL0TLLa+mm+GGbhiDKQ108ToyQnC0TP2bslucfaqCtXsm6u8sQPcJ5W2ULOzKnDtixsEFpO0k7LKAUaTqica2Ew2oLB2YNG7ODQ3vnaHT8zHzT8=
+before_deploy:
+  - bash build_packages.sh
 deploy:
-  provider: pypi
-  on:
-    branch: master
-    tags: true
-  user: cybergrx
-  password:
-    secure: wmT3bVAY/u/3ZM2fsLNITAedLoZ56zOE0eVhqyCLueN1QeKpQBT9HSvP2bjeVkZ3f3XP9NT6YO4Tm7aXtA+/LPom4d/zo6rSW8MTL4ZMjkh8zboyVm9TGP4Xv6pwA+gNf01yfyt1WV4JrICREljlMyE+m+ScgldRxmJLILWz15q9W7RztRA7RtxJDxqa9uTlKpjs0qv6LyxysjYRuAAnGEYJ2DZBg0HXEVf1T3XpH6JmWKI2DRCf818DvLiEG9ZPoOk+slxuupMoy+a5V1Du5gDfwZJoZ6C1mHSyf3/1Ai6NXkLse0aaIIoIqWhacz3z1rfJOUXL1EL5dluelUhW4lv3mgvnFKFMqTwQFM2jZrK5kCYh5fo/msvAKnSJCu6ZflsW8mnZYGSY91TgUaYZIvhUDkheYU/lSp6Gaw+aLOnd6FptXFEPQrh0wgzFB1et7rq96EDH0zHw7sNttYvtpSNhp/vOBOsU0iAUgnttjOWaICcnkuDwxFQN6gPUx34RgfabfNKTjsfOccFJK6CPOS2TmzlBF2FRjJ/v52A83qq/d8Bmmo34NAqR3RhVUMBEs/4x8ykAd34InqggISvxqA+UdRzvrPXalfTwHgls9mS+nej9VgIvOv5KYcYKfEr+sbGeuPTErBAC8TnxP9HWv9TeK4DHhR//fegSRkdes/s=
+  provider: script
+  script: bash deploy_packages.sh
