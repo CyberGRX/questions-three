@@ -20,7 +20,7 @@ if ! $PYTHON setup.py test; then
   exit 1
 fi
 
-if ! $PYTHON setup.py bdist_wheel -d $DIST_DIR; then
+if ! $PYTHON setup.py sdist bdist_wheel -d $DIST_DIR; then
   exit 1
 fi
 
@@ -30,7 +30,7 @@ for PACKAGE_DIR in optional_packages/*; do
   if ! $PYTHON setup.py test; then
     exit 1
   fi
-  if ! $PYTHON setup.py bdist_wheel -d $DIST_DIR; then
+  if ! $PYTHON setup.py sdist bdist_wheel -d $DIST_DIR; then
     exit 1
   fi
 done
