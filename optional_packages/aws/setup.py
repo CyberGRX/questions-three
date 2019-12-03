@@ -30,7 +30,7 @@ setup(
     name='questions-three-aws',
     version='%d.%d.%d.%d' % (
         MAJOR_VERSION, MINOR_VERSION, PATCH_VERSION, build_number()),
-    description='Fundamental components of an automated test platform',
+    description='Amazon Web Services integrations for Questions Three',
     author='Mike Duskis',
     author_email='mike.duskis@cybergrx.com',
     packages=find_packages(exclude=('tests.*', 'tests')),
