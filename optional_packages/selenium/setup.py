@@ -26,9 +26,21 @@ def build_number():
     return 0
 
 
+with open('README.md', 'r') as f:
+    long_description = f.read()
+
+
 setup(
     author='Mike Duskis',
     author_email='mike.duskis@cybergrx.com',
+    classifiers=[
+        'Development Status :: 5 - Production/Stable',
+        'Intended Audience :: Developers',
+        'License :: OSI Approved :: MIT License',
+        'Natural Language :: English',
+        'Operating System :: OS Independent',
+        'Programming Language :: Python :: 3',
+        'Topic :: Software Development :: Testing'],
     cmdclass={'test': Tester},
     description='Selenium integration and tools for questions-three',
     install_requires=[
@@ -41,6 +53,8 @@ setup(
         'twine>=1.9.1',  # required by setup to upload package to Nexus
         'wheel>=0.30.0'  # required by setup to build package
         ],
+    long_description=long_description,
+    long_description_content_type='text/markdown',
     name='questions-three-selenium',
     package_data={
         'questions_three_selenium': ['module_cfg.yml'],
@@ -48,5 +62,5 @@ setup(
     packages=find_packages(exclude=('tests.*', 'tests')),
     version='%d.%d.%d.%d' % (
         MAJOR_VERSION, MINOR_VERSION, PATCH_VERSION, build_number()),
-    url='https://git.dev.grx.io/Testing/questions-three',
+    url='https://github.com/CyberGRX/questions-three'
     )
