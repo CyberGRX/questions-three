@@ -25,11 +25,17 @@ Engineering is all about trade-offs.  We can reduce the coding effort, but only 
 
  - **HTTP Client** that tracks its own activity and converts failures to meaningful artifacts for test reports.
 
- - **Webdriver Integrations** that facilitate compatibility testing and make Selenium WebDriver a full citizen of Question-Three's event-driven world.
-
  - **Vanilla Functions** useful for testing and entirely self-contained.   Use as many or as few as you would like.
 
 The provided "test script" scaffold helps you write a test suite which contains one or more tests.  
+
+## Optional Packages
+
+  - <a href="optional_packages/aws"><b>Amazon Web Services Integrations</b></a>
+
+  - <a href="optional_packages/selenium"><b>Selenium Integrations</b></a> that facilitate compatibility testing and make Selenium WebDriver a full citizen of Question-Three's event-driven world.
+
+## Quick Start
 
 ### Install questions-three
 ```
