@@ -31,9 +31,9 @@ The provided "test script" scaffold helps you write a test suite which contains 
 
 ## Optional Packages
 
-  - <a href="optional_packages/aws"><b>Amazon Web Services Integrations</b></a>
+  - <a href="https://pypi.org/project/questions-three-aws/"><b>Amazon Web Services Integrations</b></a>
 
-  - <a href="optional_packages/selenium"><b>Selenium Integrations</b></a> that facilitate compatibility testing and make Selenium WebDriver a full citizen of Question-Three's event-driven world.
+  - <a href="https://pypi.org/project/questions-three-selenium/"><b>Selenium Integrations</b></a> that facilitate compatibility testing and make Selenium WebDriver a full citizen of Question-Three's event-driven world.
 
 ## Quick Start
 
