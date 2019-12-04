@@ -27,14 +27,10 @@ def build_number():
 
 
 setup(
-    name='questions-three-selenium',
-    version='%d.%d.%d.%d' % (
-        MAJOR_VERSION, MINOR_VERSION, PATCH_VERSION, build_number()),
-    description='Selenium integration and tools for questions-three',
     author='Mike Duskis',
     author_email='mike.duskis@cybergrx.com',
-    packages=find_packages(exclude=('tests.*', 'tests')),
-    url='https://git.dev.grx.io/Testing/questions-three',
+    cmdclass={'test': Tester},
+    description='Selenium integration and tools for questions-three',
     install_requires=[
         'expects>=0.8.0',  # required by unit tests
         'questions-three',
@@ -45,8 +41,12 @@ setup(
         'twine>=1.9.1',  # required by setup to upload package to Nexus
         'wheel>=0.30.0'  # required by setup to build package
         ],
-    cmdclass={'test': Tester},
+    name='questions-three-selenium',
     package_data={
         'questions_three_selenium': ['module_cfg.yml'],
-        'questions_three_selenium.dom_dumper': ['dump_dom.js']
-        })
+        'questions_three_selenium.dom_dumper': ['dump_dom.js']},
+    packages=find_packages(exclude=('tests.*', 'tests')),
+    version='%d.%d.%d.%d' % (
+        MAJOR_VERSION, MINOR_VERSION, PATCH_VERSION, build_number()),
+    url='https://git.dev.grx.io/Testing/questions-three',
+    )
