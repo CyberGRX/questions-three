@@ -27,14 +27,10 @@ def build_number():
 
 
 setup(
-    name='questions-three-aws',
-    version='%d.%d.%d.%d' % (
-        MAJOR_VERSION, MINOR_VERSION, PATCH_VERSION, build_number()),
-    description='Amazon Web Services integrations for Questions Three',
     author='Mike Duskis',
     author_email='mike.duskis@cybergrx.com',
-    packages=find_packages(exclude=('tests.*', 'tests')),
-    url='https://git.dev.grx.io/Testing/questions-three',
+    cmdclass={'test': Tester},
+    description='Amazon Web Services integrations for Questions Three',
     install_requires=[
         'boto3>=1.10.4',  # required to save artifacts to s3  temorary fixed version for same reason as botocore
         'docutils<0.15,>=0.10',  # part of the temporary work-around
@@ -45,7 +41,11 @@ setup(
         'twine>=1.9.1',  # required by setup to upload package to Nexus
         'wheel>=0.30.0'  # required by setup to build package
         ],
-    cmdclass={'test': Tester},
+    name='questions-three-aws',
     package_data={
-        'questions_three_aws': ['module_cfg.yml'],
-        })
+        'questions_three_aws': ['module_cfg.yml']},
+    packages=find_packages(exclude=('tests.*', 'tests')),
+    url='https://git.dev.grx.io/Testing/questions-three',
+    version='%d.%d.%d.%d' % (
+        MAJOR_VERSION, MINOR_VERSION, PATCH_VERSION, build_number()),
+    )
