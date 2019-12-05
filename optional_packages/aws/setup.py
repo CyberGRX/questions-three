@@ -58,7 +58,7 @@ setup(
     package_data={
         'questions_three_aws': ['module_cfg.yml']},
     packages=find_packages(exclude=('tests.*', 'tests')),
-    url='https://git.dev.grx.io/Testing/questions-three',
+    url='https://github.com/CyberGRX/questions-three',
     version='%d.%d.%d.%d' % (
         MAJOR_VERSION, MINOR_VERSION, PATCH_VERSION, build_number()),
     )
