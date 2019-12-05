@@ -26,9 +26,20 @@ def build_number():
     return 0
 
 
+with open('README.md', 'r') as f:
+    long_description = f.read()
+
 setup(
     author='Mike Duskis',
     author_email='mike.duskis@cybergrx.com',
+    classifiers=[
+        'Development Status :: 5 - Production/Stable',
+        'Intended Audience :: Developers',
+        'License :: OSI Approved :: MIT License',
+        'Natural Language :: English',
+        'Operating System :: OS Independent',
+        'Programming Language :: Python :: 3',
+        'Topic :: Software Development :: Testing'],
     cmdclass={'test': Tester},
     description='Amazon Web Services integrations for Questions Three',
     install_requires=[
@@ -41,6 +52,8 @@ setup(
         'twine>=1.9.1',  # required by setup to upload package to Nexus
         'wheel>=0.30.0'  # required by setup to build package
         ],
+    long_description=long_description,
+    long_description_content_type='text/markdown',
     name='questions-three-aws',
     package_data={
         'questions_three_aws': ['module_cfg.yml']},
