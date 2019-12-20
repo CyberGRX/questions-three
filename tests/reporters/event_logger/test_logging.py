@@ -103,7 +103,7 @@ class TestLogging(TestCase):
             event=TestEvent.test_ended,
             test_name=test_name)
         level, msg = self.logged()
-        expect(msg).to(equal('Test "%s" ended' % test_name))
+        expect(msg).to(equal('Check "%s" ended' % test_name))
 
     def test_test_erred_level(self):
         EventBroker.publish(
@@ -137,7 +137,7 @@ class TestLogging(TestCase):
             exception=err,
             test_name=test_name)
         level, msg = self.logged()
-        expect(msg).to(equal('Test "%s" failed: %s' % (test_name, err)))
+        expect(msg).to(equal('Check "%s" failed: %s' % (test_name, err)))
 
     def test_test_skipped_level(self):
         err = TestSkipped("Let's not go there")
@@ -157,7 +157,7 @@ class TestLogging(TestCase):
             exception=err,
             test_name=test_name)
         level, msg = self.logged()
-        expect(msg).to(equal('Test "%s" skipped: %s' % (test_name, err)))
+        expect(msg).to(equal('Check "%s" skipped: %s' % (test_name, err)))
 
     def test_test_started_level(self):
         EventBroker.publish(
@@ -172,7 +172,7 @@ class TestLogging(TestCase):
             event=TestEvent.test_started,
             test_name=test_name)
         level, msg = self.logged()
-        expect(msg).to(equal('Test "%s" started' % test_name))
+        expect(msg).to(equal('Check "%s" started' % test_name))
 
 
 if '__main__' == __name__:
