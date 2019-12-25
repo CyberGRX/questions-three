@@ -1,5 +1,5 @@
 
-# Questions-Three
+# Questions Three
 ### A Library for Serious Software Interrogators (and silly ones too)
 
 > Stop! Who would cross the Bridge of Death must answer me these questions three, ere the other side he see.
@@ -14,12 +14,19 @@ The first group is optimized for precision and speed.  A good unit check proves 
 
 Engineering is all about trade-offs.  We can reduce the coding effort, but only if we are willing to sacrifice control.   This makes the existing high-level automation tools distinctly unsatisfactory to testers who would prefer the opposite trade: more control in exchange for the need to approach automation as a _bona-fide_ software development project.
 
-**If you want complete control over your system-level automation and are willing to get some coding dirt under your fingernails in exchange, then Questions-Three could be your best friend.**  As a flexible library rather than an opinionated framework, it will support you without dictating structures or rules.  Its features were designed to work together, but you can use them separately or even integrate them into the third-party or homegrown framework of your choice.
+**If you want complete control over your system-level automation and are willing to get some coding dirt under your fingernails in exchange, then Questions Three could be your best friend.**  As a flexible library rather than an opinionated framework, it will support you without dictating structures or rules.  Its features were designed to work together, but you can use them separately or even integrate them into the third-party or homegrown framework of your choice.
 
 <a name="heretical-terminology"><h2>A note on heretical terminology</h2></a>
 The vast majority of software professionals refer to inspection work done by machines as "automated testing."  James Bach and Michael Bolton make <a href="https://www.satisfice.com/blog/archives/856">a strong case</a> that this is a dangerous abuse of the word "testing" and suggest that we use "checking" instead when we talk about executing a procedure with a well-defined expected outcome.
 
 Questions Three tries to maintain neutrality in this debate.  Where practical, it lets you choose whether you want to say "test" or "check."  Internally, it uses "test" for consistency with third-party libraries.  As the public face of the project, this documentation falls on the "check" side.  It says "check suite" where most testers would say "test suite."
+
+## Orientation Resources
+
+- Article: <a href="https://medium.com/better-programming/waiter-theres-a-database-in-my-unit-test-9698d866102e">"Waiter, There's a _Database_ in My Unit Test!"</a> explains the differences between unit, integration, and system testing and the role for each.
+
+- Video: <a href="https://drive.google.com/open?id=1OyRVtQtciLmLiyzwA0tUb3ActWecnenZ">"Industrial Strength Automation"</a> presentation from STARWEST 2019 makes the cases for and against building a serious automation program.  It concludes with an extended discussion on the history, purpose, and design of Questions Three.
+
 
 ## What's in the Box
 
@@ -192,7 +199,7 @@ The key to understanding scaffold design is to understand the <a href="#event-br
 - TEST_ENDED
 
 <a name="reporters-section"><h2>Reporters</h2></a>
-In Questions-Three, "reporter" is a broad term for an object that listens for an event, converts it to a message useful to someone or something and sends the message.  Built-in reporters do relatively dull things like sending events to the system log and producing the Junit XML report, but there is no reason you couldn't build a more interesting reporter that launches a Styrofoam missile at the developer who broke the build.
+In Questions Three, "reporter" is a broad term for an object that listens for an event, converts it to a message useful to someone or something and sends the message.  Built-in reporters do relatively dull things like sending events to the system log and producing the Junit XML report, but there is no reason you couldn't build a more interesting reporter that launches a Styrofoam missile at the developer who broke the build.
 
 ### Built-in reporters ###
 
@@ -221,12 +228,12 @@ The Event Broker is Questions Three's beating heart.  It's how the components co
 
 The Event Broker is little more than a simple implementation of the <a href="https://en.wikipedia.org/wiki/Publish%E2%80%93subscribe_pattern">Publish/Subscribe Pattern</a>.  Component A subscribes to an event by registering a function with the Event Broker.  Component B publishes the event with an optional dictionary of arbitrary properties.  The Event Broker calls the subscriber function, passing it the dictionary as keyword arguments.
 
-An event can be any object. Internally, Questions-Three limits itself to members of an enum called TestEvent.  It's defined in `questions_three.constants`.
+An event can be any object. Internally, Questions Three limits itself to members of an enum called TestEvent.  It's defined in `questions_three.constants`.
 
 An event property can also be any object. Property names are restricted to valid Python variable names so the Event Broker can send them as keyword arguments.
 
 <a name="http-client-section"><h2>HTTP Client</h2></a>
-The HTTP client is a wrapper around the widely-used <a href="https://requests.readthedocs.io/en/master/">requests module</a>, so it can serve as a drop-in replacement. Its job in life is to integrate `requests` into the event-driven world of Questions-Three, doing things like publishing an HTTP transcript when a check fails.  It also adds a few features that you can use.  Nearly all of the documentation for `requests` applies to HttpClient as well.  There are two deviations, one significant and one somewhat obscure.
+The HTTP client is a wrapper around the widely-used <a href="https://requests.readthedocs.io/en/master/">requests module</a>, so it can serve as a drop-in replacement. Its job in life is to integrate `requests` into the event-driven world of Questions Three, doing things like publishing an HTTP transcript when a check fails.  It also adds a few features that you can use.  Nearly all of the documentation for `requests` applies to HttpClient as well.  There are two deviations, one significant and one somewhat obscure.
 
 ### Deviation 1: HTTP Client raises an exception when it encounters an exceptional status code ###
 
