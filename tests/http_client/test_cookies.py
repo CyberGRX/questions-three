@@ -51,27 +51,27 @@ class TestCookies(TestCase):
         args, kwargs = spy.call_history[-1]
         return args[0]
 
-    def xest_prepares_request_with_given_method(self):
+    def test_prepares_request_with_given_method(self):
         client = HttpClient()
         client.enable_cookies()
         client.delete('http://vikings')
         expect(self.extract_request_to_prep().method).to(equal('DELETE'))
 
-    def xest_prepares_request_with_given_url(self):
+    def test_prepares_request_with_given_url(self):
         client = HttpClient()
         client.enable_cookies()
         url = 'https://stuffed.io?first=who'
         client.get(url)
         expect(self.extract_request_to_prep().url).to(equal(url))
 
-    def xest_prepares_request_with_given_headers(self):
+    def test_prepares_request_with_given_headers(self):
         client = HttpClient()
         client.enable_cookies()
         headers = {'spam': 'lovely', 'baked-beans': 'off'}
         client.get('http://menu', headers=headers)
         expect(self.extract_request_to_prep().headers).to(equal(headers))
 
-    def xest_prepares_request_with_given_data(self):
+    def test_prepares_request_with_given_data(self):
         client = HttpClient()
         client.enable_cookies()
         data = 'yaddayaddayadda'
@@ -82,7 +82,7 @@ class TestCookies(TestCase):
         session_spy = self.session_class_spy.return_value_spies[-1]
         return session_spy.attribute_spies['send']
 
-    def xest_sends_prepared_request(self):
+    def test_sends_prepared_request(self):
         client = HttpClient()
         client.enable_cookies()
         client.post('http://pewpewpew')
@@ -92,7 +92,7 @@ class TestCookies(TestCase):
         args, kwargs = send_spy.call_history[-1]
         expect(args[0]).to(be(prepped))
 
-    def xest_returns_response(self):
+    def test_returns_response(self):
         client = HttpClient()
         client.enable_cookies()
         response = client.head('http://pewpewpew')
