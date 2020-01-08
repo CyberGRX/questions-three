@@ -11,7 +11,7 @@ As the name implies, the S3 Artifact Saver saves artifacts to an AWS S3 bucket. 
 Create (or append) a custom reporters file:
 
 ```
-echo questions_three_aws.S3ArtifactSaver >> /var/custom_reporters
+echo questions_three_aws.s3_artifact_saver.S3ArtifactSaver >> /var/custom_reporters
 ```
 
 Inform Questions Three about the custom reporters file:
