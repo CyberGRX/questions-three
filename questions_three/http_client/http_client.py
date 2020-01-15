@@ -31,6 +31,7 @@ class HttpClient:
             self._proxies['http'] = config.http_proxy
         if config.https_proxy:
             self._proxies['https'] = config.https_proxy
+        self._exception_callbacks = {}
         self._logger = logger_for_module(__name__)
         self._session = None
         self._persistent_headers = {}
@@ -39,6 +40,24 @@ class HttpClient:
 
     def enable_cookies(self):
         self._session = dependency(requests).Session()
+
+    def set_exceptional_response_callback(self, *,  exception_class, callback):
+        """
+        If the response contains an exceptional response code that
+        maps to the given exception class, call the given function with
+        the exception as the "exception" keyword argument.
+
+        Limitation: You can't add a parent or child class of an exception
+          that has already been added.
+        """
+        for existing in self._exception_callbacks.keys():
+            if (
+                    issubclass(existing, exception_class) or
+                    issubclass(exception_class, existing)):
+                raise TypeError(
+                    f'Cannot add {exception_class.__name__} because related '
+                    f'{existing.__name__} is already present')
+        self._exception_callbacks[exception_class] = callback
 
     def set_persistent_headers(self, **kwargs):
         """
@@ -130,7 +149,20 @@ class HttpClient:
                     request_url=url,
                     response_location_header=extract_location_header(resp)),
                 headers=headers, redirect_depth=redirect_depth+1, **kwargs)
-        inspect_response(resp)
+        try:
+            dependency(inspect_response)(resp)
+        except Exception as e:
+            for exception_class, callback in self._exception_callbacks.items():
+                if isinstance(e, exception_class):
+                    callback(exception=e)
+                    return
+            raise
+
+            if type(e) in self._exception_callbacks.keys():
+                self._exception_callbacks[type(e)](exception=e)
+            else:
+                raise
+
         return resp
 
     def _request_func(self, method):

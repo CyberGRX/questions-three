@@ -293,6 +293,29 @@ client.set_persistent_headers(session_id='some fake id', secret_username='bob')
 
 The client will now send the specified headers to the server with each request.
 
+
+### New feature: callbacks for exceptional HTTP responses
+
+Instead of putting each request into its own try/except block, you can install
+a generic exception handler as a <a href="https://en.wikipedia.org/wiki/Callback_(computer_programming)">callback</a>:
+```
+def on_not_found(exception):
+  mother_ship.beam_up(exception, exception.response.text)
+
+client = HttpClient()
+client.set_exceptional_response_callback(exception_class=HttpNotFound, callback=on_not_found)
+client.get('https://something-that-does-not-exist.mil/')
+```
+
+In the example above, the server will respond to the `GET` request with an `HTTP 404` (Not Found) response.  The client will notice that it has a callback for the `HttpNotFound` exception, so will call `on_not_found` with the `HttpNotFound` exception as the `exception` keyword argument.
+
+Installed callbacks will apply to child exception classes as well, so a callback for `HttpClientError` will be called if the server returns an `HttpNotFound` response (because `HttpClientError` is the set of all 4xx responses and `HttpNotFound` is 404).
+
+You can install as many callbacks as you would like, with one important restriction.  You may not install a parent class or a child class of an exception that already has an associated callback.  For example, you may install both `HttpNotFound` and `HttpUnauthorized`, but you may not install both `HttpNotFound` and `HttpClientError` because `HttpClientError` is a parent class of `HttpNotFound`.
+
+See `questions_three/exceptions/http_error.py` for complete details of the HttpError
+class hierarchy. It follows the classification scheme specified in RFC 7231.
+
 ### Tuning with environment variables ###
 `HTTP_PROXY` This is a well-established environment variable. Set it to the URL of your proxy for plain HTTP requests.
 
