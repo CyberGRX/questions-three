@@ -309,6 +309,8 @@ client.get('https://something-that-does-not-exist.mil/')
 
 In the example above, the server will respond to the `GET` request with an `HTTP 404` (Not Found) response.  The client will notice that it has a callback for the `HttpNotFound` exception, so will call `on_not_found` with the `HttpNotFound` exception as the `exception` keyword argument.
 
+If a callback returns `None` (as in the example above), the client will re-raise the exception after it processes the callback.  If the callback returns anything else, the client will return whatever the callback returns.  Please observe the <a href="https://en.wikipedia.org/wiki/Principle_of_least_astonishment">Principle of Least Astonishment</a> and have your callback return either `None` or else an <a href="https://requests.readthedocs.io/en/master/user/advanced/#request-and-response-objects">HttpResponse</a> object.
+
 Installed callbacks will apply to child exception classes as well, so a callback for `HttpClientError` will be called if the server returns an `HttpNotFound` response (because `HttpClientError` is the set of all 4xx responses and `HttpNotFound` is 404).
 
 You can install as many callbacks as you would like, with one important restriction.  You may not install a parent class or a child class of an exception that already has an associated callback.  For example, you may install both `HttpNotFound` and `HttpUnauthorized`, but you may not install both `HttpNotFound` and `HttpClientError` because `HttpClientError` is a parent class of `HttpNotFound`.

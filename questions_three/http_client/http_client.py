@@ -154,8 +154,9 @@ class HttpClient:
         except Exception as e:
             for exception_class, callback in self._exception_callbacks.items():
                 if isinstance(e, exception_class):
-                    callback(exception=e)
-                    return
+                    response = callback(exception=e)
+                    if response is not None:
+                        return response
             raise
 
             if type(e) in self._exception_callbacks.keys():

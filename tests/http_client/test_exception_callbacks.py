@@ -1,7 +1,7 @@
 from functools import partial
 from unittest import TestCase, main
 
-from expects import expect, be_a
+from expects import expect, be, be_a
 import requests
 from twin_sister import open_dependency_context
 from twin_sister.expects_matchers import raise_ex
@@ -52,19 +52,9 @@ class TestExeptionCallbacks(TestCase):
             pass
         spy.assert_was_called()
 
-    def test_does_not_re_raise_specified_exception(self):
-        exception_class = HttpImATeapot
-        client = HttpClient()
-        client.set_exceptional_response_callback(
-            exception_class=exception_class, callback=lambda *a, **k: None)
-        self.context.inject(
-            inspect_response, func_that_raises(exception_class()))
-        expect(partial(client.get, 'http://coffee.io')).not_to(
-            raise_ex(exception_class))
-
     def test_passes_exception_as_kwarg(self):
         exception_class = HttpImATeapot
-        spy = FunctionSpy()
+        spy = FunctionSpy(return_value=EndlessFake())
         client = HttpClient()
         client.set_exceptional_response_callback(
             exception_class=exception_class, callback=spy)
@@ -129,6 +119,29 @@ class TestExeptionCallbacks(TestCase):
                 exception_class=SonOfSpam,
                 callback=EndlessFake())).to(
             raise_ex(TypeError))
+
+    def test_re_raises_exception_if_callback_returns_none(self):
+        original = HttpImATeapot()
+        self.context.inject(
+            inspect_response, func_that_raises(original))
+        client = HttpClient()
+        client.set_exceptional_response_callback(
+            exception_class=HttpImATeapot,
+            callback=lambda *a, **k: None)
+        expect(
+            partial(client.delete, 'http://nothing.new')).to(
+                raise_ex(original))
+
+    def test_returns_response_returned_by_callback(self):
+        callback_response = EndlessFake()
+        self.context.inject(
+            inspect_response, func_that_raises(HttpNotFound()))
+        client = HttpClient()
+        client.set_exceptional_response_callback(
+            exception_class=HttpNotFound,
+            callback=lambda *a, **k: callback_response)
+        expect(client.get('http://stuffed')).to(
+            be(callback_response))
 
 
 if '__main__' == __name__:
