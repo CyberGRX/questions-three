@@ -51,7 +51,7 @@ class EventBroker:
         if event in cls._subscribers.keys():
             for subscriber in cls._subscribers[event]:
                 call_if_alive(
-                    subscriber, event_time=event_time,
+                    subscriber, event=event, event_time=event_time,
                     run_id=run_id, **kwargs)
 
     @classmethod
@@ -59,7 +59,7 @@ class EventBroker:
         cls._subscribers = {}  # event -> [subscribers]
 
     @classmethod
-    def subscribe(cls, *, event, func):
+    def _subscribe(cls, *, func, event):
         if event not in cls._subscribers.keys():
             cls._subscribers[event] = []
         if is_bound(func):
@@ -67,6 +67,17 @@ class EventBroker:
         else:
             subscriber = weakref.ref(func)
         cls._subscribers[event].append(subscriber)
+
+    @classmethod
+    def subscribe(cls, *, func, event=None, events=None):
+        if not (bool(event) ^ bool(events)):
+            raise TypeError(
+                'An event or events must be specified (but not both)')
+        if events:
+            for event in events:
+                cls._subscribe(func=func, event=event)
+        else:
+            cls._subscribe(func=func, event=event)
 
 
 EventBroker.reset()
