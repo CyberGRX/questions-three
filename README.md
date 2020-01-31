@@ -185,6 +185,68 @@ Thanks to some metaclass hocus-pocus which you're free to gawk at by looking at 
 python my_xunit_suite.py
 ```
 
+### The Test Table Scaffold
+The Test Table scaffold was designed to support two use cases:
+1. You would like to repeat the same procedure with different sets of arguments.
+2. You would like to execute the same procedure multiple times to measure performance.
+
+#### Example test table that varies arguments
+
+```
+from expects import expect, equal
+from questions_three.scaffolds.test_table import execute_test_table
+
+TABLE = (
+    ('x', 'y', 'expect sum', 'expect exception'),
+    (2, 2, 4, None),
+    (1, 0, 1, None),
+    (0, 1, 0, None),
+    (0.1, 0.1, 0.2, None),
+    (1, 'banana', None, TypeError),
+    (1, '1', None, TypeError),
+    (2, 2, 5, None))
+
+
+def test_add(*, x, y, expect_sum):
+    expect(x + y).to(equal(expect_sum))
+
+
+execute_test_table(
+    suite_name='TestAddTwoThings', table=TABLE, func=test_add)
+
+```
+
+#### Example test table that measures performance
+```
+from questions_three.scaffolds.test_table import execute_test_table
+
+TABLE = (
+    ('operation', 'sample size'),
+    ('1 + 1', 30),
+    ('1 * 1', 60),
+    ('1 / 1', 42))
+
+
+def calculate(operation):
+    exec(operation)
+
+
+execute_test_table(
+    suite_name='MeasureOperatorPerformance',
+    table=TABLE, func=calculate, randomize_order=True)
+```
+
+The optional `randomize_order` argument instructs the scaffold to execute the rows
+in a random order (to mitigate systematic bias that could affect measurements).
+
+For each row that exits cleanly (no assertion failures or other exceptions),
+the scaffold publishes a SAMPLE_MEASURED event that a reporter can collect.
+For example, the built-in EventLogger logs each of these events, including
+the row execution time.
+
+Like the other built-in scaffolds, the Test Table produces plain old Python executable scripts.
+
+
 ### Building your own scaffold
 Nothing stops you from building your own scaffold.  The test_script scaffold makes a good example of the services your scaffold should provide.  The xUnit scaffold is much more difficult to understand (but more fun if you're into that sort of thing).
 

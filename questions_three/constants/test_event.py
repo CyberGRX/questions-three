@@ -6,6 +6,7 @@ TestEvent = Enum(
     """
     artifact_created
     report_created
+    sample_measured
     suite_ended
     suite_erred
     suite_results_compiled

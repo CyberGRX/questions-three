@@ -38,6 +38,7 @@ class TestLogging(TestCase):
 
     def tearDown(self):
         self.context.close()
+        EventBroker.reset()
 
     def logged(self):
         expect(self.log_spy.entries).to(have_length(1))
@@ -173,6 +174,26 @@ class TestLogging(TestCase):
             test_name=test_name)
         level, msg = self.logged()
         expect(msg).to(equal('Check "%s" started' % test_name))
+
+    def test_sample_measured_level(self):
+        EventBroker.publish(
+            event=TestEvent.sample_measured,
+            test_name='spam', sample_parameters='spam',
+            sample_execution_seconds=0)
+        level, msg = self.logged()
+        expect(level).to(equal('info'))
+
+    def test_sample_measured_message(self):
+        name = 'Turkey'
+        params = 'argle bargle'
+        seconds = 105.3
+        EventBroker.publish(
+            event=TestEvent.sample_measured,
+            test_name=name, sample_parameters=params,
+            sample_execution_seconds=seconds)
+        level, msg = self.logged()
+        expect(msg).to(
+            equal(f'{name} completed in {seconds} seconds'))
 
 
 if '__main__' == __name__:
