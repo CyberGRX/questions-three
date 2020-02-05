@@ -130,6 +130,7 @@ class HttpClient:
         self._transcript.add_request(
             method, url, headers=headers, **kwargs)
         self._logger.debug('%s %s' % (method.upper(), url))
+        self._logger.debug(f'Request headers: {headers}')
         if self._session is None:
             func = self._send_plain_request
         else:
@@ -138,6 +139,7 @@ class HttpClient:
             method, url, headers=headers, verify=self._verify_certs,
             **kwargs)
         self._logger.debug('HTTP %d\n%s' % (resp.status_code, resp.text))
+        self._logger.debug(f'Response headers: {resp.headers}')
         self._transcript.add_response(resp)
         if resp.status_code in HANDLE_THESE_REDIRECT_STATUS_CODES:
             if redirect_depth >= STOP_FOLLOWING_REDIRECTS_AFTER_THIS_MANY - 1:

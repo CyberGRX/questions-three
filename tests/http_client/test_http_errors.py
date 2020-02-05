@@ -5,6 +5,7 @@ import requests
 from twin_sister import open_dependency_context
 
 from twin_sister.expects_matchers import raise_ex
+from twin_sister.fakes import EndlessFake
 import questions_three.exceptions.http_error as error
 from questions_three.http_client import HttpClient
 
@@ -12,9 +13,10 @@ from questions_three.http_client import HttpClient
 HttpError = error.HttpError
 
 
-class FakeHttpResponse:
+class FakeHttpResponse(EndlessFake):
 
     def __init__(self):
+        super().__init__()
         self.status_code = 200
         self.text = ''
 
