@@ -9,7 +9,7 @@ from unittest.runner import TextTestRunner
 MAJOR_VERSION = 3
 # An even MINOR_VERSION number indicates a public release
 MINOR_VERSION = 8
-PATCH_VERSION = 1
+PATCH_VERSION = 2
 
 
 class Tester(test):
@@ -45,7 +45,7 @@ setup(
     description='Toolkit for building automated integration checks',
     install_requires=[
         'expects>=0.8.0',  # required by unit tests
-        'junit-xml>=1.8',  # required by junit reporter
+        'junit-xml==1.8',  # required by junit reporter. Fixed at version 1.8 because 1.9 introduces an interface change that causes the reporter to break.
         'lxml>=4.1.1',  # required by html_form
         'PyYAML>=5.1',  # required by ModuleConfig
         'pyfakefs>=3.4.3',  # required by unit tests
