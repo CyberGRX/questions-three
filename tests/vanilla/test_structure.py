@@ -109,6 +109,11 @@ class TestStructure(TestCase):
         expect(json.loads(Structure.from_json(serialized).to_json())).to(
             equal(ARBITRARY_DICT))
 
+    def test_serializes_nones_as_json_nulls(self):
+        s = Structure(beans=None)
+        expect(json.loads(s.to_json())).to(
+            equal({'beans': None}))
+
     def test_can_add_item(self):
         key = 'i'
         value = 1

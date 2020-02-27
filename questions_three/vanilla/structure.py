@@ -13,6 +13,8 @@ def flatten(obj):
 
 
 def to_json_serializable(obj):
+    if obj is None:
+        return obj
     if hasattr(obj, 'items'):
         return {k: to_json_serializable(v) for k, v in obj.items()}
     if isinstance(obj, list):
