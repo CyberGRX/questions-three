@@ -6,12 +6,12 @@ from twin_sister import open_dependency_context
 
 from twin_sister.expects_matchers import contain_key_with_value
 from questions_three.http_client import HttpClient
-from twin_sister.fakes import EmptyFake, MasterSpy
+from twin_sister.fakes import EndlessFake, MasterSpy
 
 
-class FakeRequests(EmptyFake):
+class FakeRequests(EndlessFake):
 
-    def __init__(self, session=EmptyFake()):
+    def __init__(self, session=EndlessFake()):
         self.status_code = 200
         self._session = session
 

@@ -6,10 +6,10 @@ from twin_sister import open_dependency_context
 
 from twin_sister.expects_matchers import contain_key_with_value, raise_ex
 from questions_three.http_client import HttpClient
-from twin_sister.fakes import EmptyFake, MasterSpy
+from twin_sister.fakes import EndlessFake, MasterSpy
 
 
-class FakeResponse(EmptyFake):
+class FakeResponse(EndlessFake):
 
     status_code = 200
 

@@ -3,7 +3,7 @@ from unittest import TestCase, main
 from expects import expect, be
 import requests
 from twin_sister import open_dependency_context
-from twin_sister.fakes import EmptyFake, FunctionSpy, MutableObject
+from twin_sister.fakes import EndlessFake, FunctionSpy, MutableObject
 
 from questions_three.http_client import HttpClient
 
@@ -13,7 +13,7 @@ class TestDisableRequests(TestCase):
     def setUp(self):
         self.context = open_dependency_context()
         self.spies = MutableObject()
-        requests_stub = EmptyFake(pattern_obj=requests)
+        requests_stub = EndlessFake(pattern_obj=requests)
         response = requests.Response()
         response.status_code = 200
         for method in ('get', 'post', 'put', 'delete', 'head'):

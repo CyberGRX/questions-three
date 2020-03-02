@@ -5,7 +5,7 @@ from expects import expect, have_keys, equal
 import requests
 from twin_sister import open_dependency_context
 from twin_sister.expects_matchers import complain
-from twin_sister.fakes import EmptyFake, MutableObject
+from twin_sister.fakes import EndlessFake, MutableObject
 
 from questions_three.exceptions import InvalidHttpResponse, TooManyRedirects
 from questions_three.exceptions.http_error import HttpUseProxy
@@ -40,7 +40,7 @@ class TestRedirection(TestCase):
 
     def setUp(self):
         self.context = open_dependency_context()
-        requests_stub = EmptyFake(pattern_obj=requests)
+        requests_stub = EndlessFake(pattern_obj=requests)
         self.spies = MutableObject()
         self.responses = []
         for method in ('get', 'post', 'put', 'delete', 'head'):

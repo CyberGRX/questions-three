@@ -1,4 +1,6 @@
 import requests
+from uuid import uuid4
+
 from twin_sister import dependency
 
 from questions_three.constants import TestEvent
@@ -26,17 +28,23 @@ class HttpClient:
     def __init__(self):
         subscribe_event_handlers(self)
         config = config_for_module(__name__)
+        log = logger_for_module(__name__)
         self._proxies = {}
         if config.http_proxy:
-            self._proxies['http'] = config.http_proxy
+            proxy = config.http_proxy
+            self._proxies['http'] = proxy
+            log.debug(f'Using HTTP proxy {proxy}')
         if config.https_proxy:
-            self._proxies['https'] = config.https_proxy
+            proxy = config.https_proxy
+            self._proxies['https'] = proxy
+            log.debug(f'(Using HTTPS proxy {proxy}')
         self._exception_callbacks = {}
         self._logger = logger_for_module(__name__)
         self._session = None
         self._persistent_headers = {}
         self._transcript = Transcript()
         self._verify_certs = config.https_verify_certs
+        log.debug(f'Socket timeout: {self._socket_timeout()}')
 
     def enable_cookies(self):
         self._session = dependency(requests).Session()
@@ -123,21 +131,30 @@ class HttpClient:
         return timeout
 
     def _request(
-            self, method, url, headers={},
+            self, method, url, headers={}, data=None,
             redirect_depth=0, **kwargs):
         self._check_request_kwargs(kwargs)
         headers = dict(self._persistent_headers, **headers)
         self._transcript.add_request(
-            method, url, headers=headers, **kwargs)
+            method, url, data=data, headers=headers, **kwargs)
         self._logger.debug('%s %s' % (method.upper(), url))
         self._logger.debug(f'Request headers: {headers}')
         if self._session is None:
             func = self._send_plain_request
         else:
             func = self._send_session_request
+        request_uuid = uuid4()
+        EventBroker.publish(
+            event=TestEvent.http_request_sent,
+            http_method=method.upper(),
+            request_headers=headers, request_url=url,
+            request_data=data, request_uuid=request_uuid)
         resp = func(
-            method, url, headers=headers, verify=self._verify_certs,
-            **kwargs)
+            method, url, headers=headers, data=data,
+            verify=self._verify_certs, **kwargs)
+        EventBroker.publish(
+            event=TestEvent.http_response_received,
+            request_uuid=request_uuid, response=resp)
         self._logger.debug('HTTP %d\n%s' % (resp.status_code, resp.text))
         self._logger.debug(f'Response headers: {resp.headers}')
         self._transcript.add_response(resp)
@@ -150,7 +167,8 @@ class HttpClient:
                 construct_redirect_url(
                     request_url=url,
                     response_location_header=extract_location_header(resp)),
-                headers=headers, redirect_depth=redirect_depth+1, **kwargs)
+                data=data, headers=headers, redirect_depth=redirect_depth+1,
+                **kwargs)
         try:
             dependency(inspect_response)(resp)
         except Exception as e:

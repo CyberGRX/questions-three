@@ -3,7 +3,7 @@ from unittest import TestCase, main
 from expects import expect, equal
 import requests
 from twin_sister import open_dependency_context
-from twin_sister.fakes import EmptyFake, MutableObject
+from twin_sister.fakes import EndlessFake, MutableObject
 
 from questions_three.http_client import HttpClient
 
@@ -31,7 +31,7 @@ class TestMethodPreservation(TestCase):
     def setUp(self):
         self.context = open_dependency_context()
         self.spies = MutableObject()
-        requests_stub = EmptyFake(pattern_obj=requests)
+        requests_stub = EndlessFake(pattern_obj=requests)
         for method in ('get', 'post', 'put', 'delete', 'head'):
             fake = FakeRequestsMethod()
             setattr(self.spies, method, fake)

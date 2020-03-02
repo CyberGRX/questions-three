@@ -9,10 +9,10 @@ from questions_three.constants import TestEvent
 from questions_three.event_broker import EventBroker
 from twin_sister.expects_matchers import contain_key_with_value, raise_ex
 from questions_three.http_client import HttpClient
-from twin_sister.fakes import EmptyFake
+from twin_sister.fakes import EndlessFake
 
 
-class FakeResponse(EmptyFake):
+class FakeResponse(EndlessFake):
 
     def __init__(self, status_code=200):
         self.status_code = status_code

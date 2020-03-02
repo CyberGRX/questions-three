@@ -7,7 +7,7 @@ from twin_sister import open_dependency_context
 
 from twin_sister.expects_matchers import raise_ex
 from questions_three.http_client import HttpClient
-from twin_sister.fakes import EmptyFake
+from twin_sister.fakes import EndlessFake
 
 
 class TestRejectsJsonArgument(TestCase):
@@ -20,7 +20,7 @@ class TestRejectsJsonArgument(TestCase):
 
     def setUp(self):
         self.context = open_dependency_context()
-        self.context.inject(requests, EmptyFake())
+        self.context.inject(requests, EndlessFake())
 
     def tearDown(self):
         self.context.close()

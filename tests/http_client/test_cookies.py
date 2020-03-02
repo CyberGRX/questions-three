@@ -5,17 +5,17 @@ import requests
 from twin_sister import open_dependency_context
 
 from questions_three.http_client import HttpClient
-from twin_sister.fakes import EmptyFake, MasterSpy
+from twin_sister.fakes import EndlessFake, MasterSpy
 
 
-class FakeRequests(EmptyFake):
+class FakeRequests(EndlessFake):
 
-    def __init__(self, session_class=EmptyFake()):
+    def __init__(self, session_class=EndlessFake()):
         self.Session = session_class
         super().__init__()
 
     def __call__(self, *args, **kwargs):
-        response = EmptyFake()
+        response = EndlessFake()
         response.status_code = 200
         return response
 

@@ -7,10 +7,10 @@ from twin_sister import open_dependency_context
 from questions_three.http_client import HttpClient
 from twin_sister.expects_matchers import contain_all_items_in, \
     contain_key_with_value
-from twin_sister.fakes import EmptyFake, MasterSpy
+from twin_sister.fakes import EndlessFake, MasterSpy
 
 
-class FakeResponse(EmptyFake):
+class FakeResponse(EndlessFake):
 
     def __init__(self):
         self.status_code = 200

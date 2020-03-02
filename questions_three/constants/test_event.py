@@ -5,6 +5,8 @@ TestEvent = Enum(
     "TestEvent",
     """
     artifact_created
+    http_request_sent
+    http_response_received
     report_created
     sample_measured
     suite_ended
