@@ -14,8 +14,6 @@ from .extract_location_header import extract_location_header
 from .inspect_response import inspect_response
 from .transcript import Transcript
 
-HTTP_METHODS = ('delete', 'get', 'head', 'options', 'patch', 'post', 'put')
-
 # See https://tools.ietf.org/html/rfc7231#section-6.4.4
 # and https://tools.ietf.org/html/rfc7238 for 308
 HANDLE_THESE_REDIRECT_STATUS_CODES = (301, 302, 303, 307, 308)
@@ -79,6 +77,27 @@ class HttpClient:
                     del self._persistent_headers[k]
             else:
                 self._persistent_headers[k] = v
+
+    def delete(self, *args, **kwargs):
+        return self._request('delete', *args, **kwargs)
+
+    def get(self, *args, **kwargs):
+        return self._request('get', *args, **kwargs)
+
+    def head(self, *args, **kwargs):
+        return self._request('head', *args, **kwargs)
+
+    def options(self, *args, **kwargs):
+        return self._request('options', *args, **kwargs)
+
+    def patch(self, *args, **kwargs):
+        return self._request('patch', *args, **kwargs)
+
+    def post(self, *args, **kwargs):
+        return self._request('post', *args, **kwargs)
+
+    def put(self, *args, **kwargs):
+        return self._request('put', *args, **kwargs)
 
     def on_suite_erred(self, suite_name=None, test_name=None, **kwargs):
         EventBroker.publish(
@@ -185,13 +204,3 @@ class HttpClient:
                 raise
 
         return resp
-
-    def _request_func(self, method):
-        def f(*args, **kwargs):
-            return self._request(method, *args, **kwargs)
-        return f
-
-    def __getattr__(self, name):
-        if name in HTTP_METHODS:
-            return self._request_func(name)
-        raise AttributeError('I have no "%s"' % name)
