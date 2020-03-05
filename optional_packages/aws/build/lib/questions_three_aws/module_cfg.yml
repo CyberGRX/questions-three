@@ -1,2 +1,0 @@
-# If we're saving artifacts to S3, use this bucket
-s3_bucket_for_artifacts: null
