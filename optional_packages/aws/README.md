@@ -26,6 +26,12 @@ Tell the S3 Artifact Saver which bucket to use:
 export S3_BUCKET_FOR_ARTIFACTS=spam-eggs-sausage-spam
 ```
 
+(Optional) Specify an object(folder) prefix to which test runs will be saved within the specified bucket:
+
+```
+export S3_PREFIX_OBJECT_NAME=some_test_runner
+```
+
 Set appropriate environment variables for AWS:
 
 See [the fine AWS documentation](https://docs.aws.amazon.com/cli/latest/userguide/cli-configure-envvars.html).  At a minimum, you will need credentials and a region.
