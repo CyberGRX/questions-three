@@ -66,12 +66,23 @@ class TestArtifactSaving(TestCase):
         levels = [rec.levelname for rec in self.context.logging.stored_records]
         expect(levels).to(contain('ERROR'))
 
-    def extract_key_parts(self):
+    def extract_key_parts(self, expected_length=5):
         parts = self.put_spy['Key'].split('/')
-        expect(parts).to(have_length(5))
+        expect(parts).to(have_length(expected_length))
         return parts
 
-    def test_saves_under_run_id(self):
+    def test_saves_under_configured_prefix_object_name_and_run_id(self):
+        planted_prefix_object_name = 'i-pity-the-fool-who-doesnt-use-me'
+        planted_run_id = 'i-just-kept-running'
+        self.context.set_env(S3_PREFIX_OBJECT_NAME=planted_prefix_object_name)
+        self.context.set_env(TEST_RUN_ID=planted_run_id)
+        publish_artifact()
+        prefix_object, run_id, kind, suite, test, filename = self.extract_key_parts(
+            expected_length=6)
+        expect(prefix_object).to(equal(planted_prefix_object_name))
+        expect(run_id).to(equal(planted_run_id))
+
+    def test_saves_under_run_id_if_no_prefix_object_name_configured(self):
         planted = 'i-didnt-do-it-nobody-saw-me-do-it-you-cant-prove-anything'
         self.context.set_env(TEST_RUN_ID=planted)
         publish_artifact()
