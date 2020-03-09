@@ -44,7 +44,8 @@ def _validate_sample_size(size, row_number):
             raise ValueError()
     except ValueError as e:
         raise TypeError(
-            f'Sample size at row {row_number} must be an integer') from e
+            f'Sample size "{size}" at row {row_number} is a {type(size)}. '
+            'It must be an integer.') from e
     if size < 0:
         raise TypeError(f'Sample size at row {row_number} must be positive')
 
