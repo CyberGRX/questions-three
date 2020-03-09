@@ -9,7 +9,7 @@ from questions_three.reporters.artifact_saver.artifact_saver import \
     sanitize_filename
 
 
-def _build_key(path, filename):
+def _assemble_file_save_path(path, filename):
     prefix_object = config_for_module(__name__).s3_prefix_object_name
     if prefix_object:
         return f'{prefix_object}/{path}/{filename}'
@@ -30,7 +30,7 @@ class S3ArtifactSaver(ArtifactSaver):
         client = dependency(boto3).client('s3')
         kwargs = {
             'Bucket': bucket,
-            'Key': _build_key(path, filename),
+            'Key': _assemble_file_save_path(path, filename),
             'Body': artifact}
         if content_type:
             kwargs['ContentType'] = content_type
