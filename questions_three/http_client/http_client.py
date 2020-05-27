@@ -47,7 +47,7 @@ class HttpClient:
     def enable_cookies(self):
         self._session = dependency(requests).Session()
 
-    def set_exceptional_response_callback(self, *,  exception_class, callback):
+    def set_exceptional_response_callback(self, *, exception_class, callback):
         """
         If the response contains an exceptional response code that
         maps to the given exception class, call the given function with
@@ -146,7 +146,7 @@ class HttpClient:
                 raise TypeError(
                     'expected $CLIENT_SOCKET_TIMEOUT '
                     f'("{timeout}") to be a number'
-                    ) from e
+                ) from e
         return timeout
 
     def _request(
@@ -186,7 +186,7 @@ class HttpClient:
                 construct_redirect_url(
                     request_url=url,
                     response_location_header=extract_location_header(resp)),
-                data=data, headers=headers, redirect_depth=redirect_depth+1,
+                data=data, headers=headers, redirect_depth=redirect_depth + 1,
                 **kwargs)
         try:
             dependency(inspect_response)(resp)
@@ -197,10 +197,5 @@ class HttpClient:
                     if response is not None:
                         return response
             raise
-
-            if type(e) in self._exception_callbacks.keys():
-                self._exception_callbacks[type(e)](exception=e)
-            else:
-                raise
 
         return resp
