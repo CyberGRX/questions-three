@@ -38,7 +38,7 @@ Questions Three tries to maintain neutrality in this debate.  Where practical, i
 
 - <a href="#http-client-section">**HTTP Client**</a> that tracks its own activity and converts failures to meaningful artifacts for test reports.
 
-- <a href="logging-section">**Logging Subsystem**</a> that, among other things, allows you to control which modules log at which level via environment variables.
+- <a href="#logging-section">**Logging Subsystem**</a> that, among other things, allows you to control which modules log at which level via environment variables.
 
 - <a href="#vanilla-section">**Vanilla Functions**</a> that you might find useful for checking and are entirely self-contained.   Use as many or as few as you would like.
 
