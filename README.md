@@ -38,6 +38,8 @@ Questions Three tries to maintain neutrality in this debate.  Where practical, i
 
 - <a href="#http-client-section">**HTTP Client**</a> that tracks its own activity and converts failures to meaningful artifacts for test reports.
 
+- <a href="#graphql-client-section">**GraphQL Client**</a> that leverages the HTTP Client for an easy to use GraphQL interface.
+
 - <a href="#logging-section">**Logging Subsystem**</a> that, among other things, allows you to control which modules log at which level via environment variables.
 
 - <a href="#vanilla-section">**Vanilla Functions**</a> that you might find useful for checking and are entirely self-contained.   Use as many or as few as you would like.
@@ -389,6 +391,50 @@ class hierarchy. It follows the classification scheme specified in RFC 7231.
 
 `HTTP_CLIENT_SOCKET_TIMEOUT` Stop waiting for an HTTP response after this number of seconds.
 
+
+<a name="graphql-client-section"><h2>GraphQL Client</h2></a>
+The GraphQL Client is a wrapper around the HTTP Client that allows for a simple way of making and handling requests against
+a GraphQL endpoint. Since the HTTP Client is doing all the heavy lifting, there is only a few custom behaviors that the GraphQL
+Client has.
+
+### Using the GraphQL Client ###
+```
+client = HttpClient() # This is where you would authenticate, if needed
+graphql_client = GraphqlClient(http_client=client, url='https://www.yoursite.com/graph')
+
+your_important_query = """
+    query {
+        ...
+    {
+"""
+graphql_client.execute(your_important_query)
+```
+
+`execute` is a neutral method that makes `POST` requests against your GraphQL endpoint for either Queries or Mutations.
+The first argument of `execute` is always the operation that you are trying to perform, and any key-word arguments 
+afterwards are turned into your given variables.
+```
+your_important_query = """
+    query ($id: String!) {
+        ...
+    {
+"""
+graphql_client.execute(your_important_query, id='1234')
+```
+
+Upon making your request (that does not result in an HTTP Error), you will either get a `GraphqlResponse` object, or 
+if you received errors in your response, an `OperationFailed` exception will be raised.
+- **GraphqlResponse** objects have the following:
+  - `.http_response` property: The `requests.Response` object returned by the HTTP Client
+  - `.data` property: The JSON representation of your response
+  - `.data_as_structure` property: The Structure object representation of your response
+- **OperationFailed** exceptions have the following:
+  - `.http_response` property: The `requests.Response` object returned by the HTTP Client
+  - `.data` property: The JSON representation of your (successful parts of the) response
+  - `.errors` property: The JSON representation of the errors included in your response
+  - `.operation` property: The query or mutation sent in your request
+  - `.operation_variables` property: The variables send in your request
+  - When raised, the exception message will include the errors strings, or the entire error collection
 
 <a name="logging-section"><h2>Logging Subsystem</h2></a>
 Questions Three extends Python's logging system to do various things internally that won't matter to most users.  However, there's one feature that may be of interest.  You can customize how verbose/noisy any given module will be.  Most common targets are event_broker when you want to see all the events passing through and http_client when you want excruciating detail about every request and response.

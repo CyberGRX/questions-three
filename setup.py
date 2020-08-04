@@ -8,8 +8,8 @@ from unittest.runner import TextTestRunner
 
 MAJOR_VERSION = 3
 # An even MINOR_VERSION number indicates a public release
-MINOR_VERSION = 12
-PATCH_VERSION = 1
+MINOR_VERSION = 14
+PATCH_VERSION = 0
 
 
 class Tester(test):
@@ -52,7 +52,8 @@ setup(
         'requests>=2.18.4',  # required by HTTP Client
         'twin-sister>=4.2.6.0',  # required by unit tests
         'twine>=1.9.1',  # required by setup to upload package to Nexus
-        'wheel>=0.30.0'  # required by setup to build package
+        'wheel>=0.30.0',  # required by setup to build package
+        'parameterized>=0.7.0'  # required by unit tests
         ],
     long_description=long_description,
     long_description_content_type='text/markdown',
