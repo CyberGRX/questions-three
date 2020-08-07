@@ -6,5 +6,6 @@ __pycache__
 **/.eggs
 **/.idea
 **/.vscode
+env
 
 .DS_Store
