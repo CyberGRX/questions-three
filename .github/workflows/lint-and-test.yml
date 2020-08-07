@@ -19,9 +19,9 @@ jobs:
         python -m pip install --upgrade pip
         if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
     - name: Lint with black
-        uses: lgeiger/black-action@master
-        with:
-          args: . --line-length 119 --check
+      uses: lgeiger/black-action@master
+      with:
+        args: . --line-length 119 --check
     - name: Test
       run: |
         python setup.py test
