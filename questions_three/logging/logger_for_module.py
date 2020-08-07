@@ -8,14 +8,14 @@ from .constants import MESSAGE_FORMAT
 
 
 def _parent_module_name(module_name):
-    parts = module_name.split('.')
+    parts = module_name.split(".")
     if len(parts) > 1:
-        return '.'.join(parts[:-1])
+        return ".".join(parts[:-1])
     return None
 
 
 def _level_for_module(module_name, environ):
-    var_name = '%s_LOG_LEVEL' % module_name.replace('.', '_').upper()
+    var_name = "%s_LOG_LEVEL" % module_name.replace(".", "_").upper()
     if var_name in environ.keys():
         level = getattr(logging, environ[var_name])
     else:

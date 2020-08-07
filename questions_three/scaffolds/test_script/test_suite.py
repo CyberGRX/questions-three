@@ -4,8 +4,7 @@ from twin_sister import dependency
 
 from questions_three.constants import TestEvent
 from questions_three.event_broker import EventBroker
-from questions_three.scaffolds.common.configure_logging \
-    import configure_logging
+from questions_three.scaffolds.common.configure_logging import configure_logging
 
 
 @contextmanager
@@ -16,6 +15,5 @@ def test_suite(name):
     try:
         yield
     except Exception as e:
-        broker.publish(
-            event=TestEvent.suite_erred, exception=e, suite_name=name)
+        broker.publish(event=TestEvent.suite_erred, exception=e, suite_name=name)
     broker.publish(event=TestEvent.suite_ended, suite_name=name)

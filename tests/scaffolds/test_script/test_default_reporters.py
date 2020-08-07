@@ -16,14 +16,12 @@ import questions_three.scaffolds.test_script
 def is_active(reporter_class):
     gc.collect()
     for candidate in EventBroker.get_subscribers():
-        if hasattr(candidate, '__self__') and \
-                isinstance(candidate.__self__, reporter_class):
+        if hasattr(candidate, "__self__") and isinstance(candidate.__self__, reporter_class):
             return True
     return False
 
 
 class TestDefaultReporters(TestCase):
-
     def setUp(self):
         close_all_dependency_contexts()
         EventBroker.reset()
@@ -32,18 +30,17 @@ class TestDefaultReporters(TestCase):
         imp.reload(questions_three.scaffolds.test_script)
 
     def test_artifact_saver(self):
-        assert is_active(ArtifactSaver), 'ArtifactSaver is not active'
+        assert is_active(ArtifactSaver), "ArtifactSaver is not active"
 
     def test_result_compiler(self):
-        assert is_active(ResultCompiler), 'ResultCompiler is not active'
+        assert is_active(ResultCompiler), "ResultCompiler is not active"
 
     def test_junit_reporter(self):
-        assert is_active(JunitReporter), 'JunitReporter is not active'
+        assert is_active(JunitReporter), "JunitReporter is not active"
 
     def test_event_logger(self):
-        assert is_active(EventLogger), \
-            'EventLogger is not active'
+        assert is_active(EventLogger), "EventLogger is not active"
 
 
-if '__main__' == __name__:
+if "__main__" == __name__:
     main()

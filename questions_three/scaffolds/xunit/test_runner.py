@@ -12,9 +12,7 @@ class TestRunner:
         self.test_name = test_name
 
     def publish(self, event, **kwargs):
-        EventBroker.publish(
-            event=event, suite_name=self.suite_name,
-            test_name=self.test_name, **kwargs)
+        EventBroker.publish(event=event, suite_name=self.suite_name, test_name=self.test_name, **kwargs)
 
     def run(self):
         self.publish(TestEvent.test_started)

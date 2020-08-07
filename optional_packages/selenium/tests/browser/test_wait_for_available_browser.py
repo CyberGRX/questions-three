@@ -17,17 +17,17 @@ class FakeException(RuntimeError):
 
 
 class TestWaitForAvailableBrowser(TestCase):
-
     def setUp(self):
         self.context = open_dependency_context(supply_env=True)
         self.timeout = 1
         self.context.set_env(
-            BROWSERSTACK_ACCESS_KEY='whatever',
-            BROWSERSTACK_URL='http://whatever',
-            BROWSERSTACK_USERNAME='whatever',
-            BROWSER_LOCATION='browserstack',
+            BROWSERSTACK_ACCESS_KEY="whatever",
+            BROWSERSTACK_URL="http://whatever",
+            BROWSERSTACK_USERNAME="whatever",
+            BROWSER_LOCATION="browserstack",
             BROWSER_AVAILABILITY_TIMEOUT=self.timeout,
-            BROWSER_AVAILABILITY_THROTTLE=0)
+            BROWSER_AVAILABILITY_THROTTLE=0,
+        )
         self.webdriver = EndlessFake()
         self.context.inject(webdriver, self.webdriver)
 
@@ -66,5 +66,5 @@ class TestWaitForAvailableBrowser(TestCase):
             ctl.join()
 
 
-if '__main__' == __name__:
+if "__main__" == __name__:
     main()

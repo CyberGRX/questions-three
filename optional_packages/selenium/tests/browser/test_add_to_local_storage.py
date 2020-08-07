@@ -8,7 +8,6 @@ from questions_three_selenium import Browser
 
 
 class FakeWebdriver:
-
     def __init__(self):
         self.script_executed = None
 
@@ -23,7 +22,6 @@ class FakeWebdriver:
 
 
 class TestAddToLocalStorage(TestCase):
-
     def setUp(self):
         self.context = open_dependency_context(supply_env=True)
 
@@ -33,12 +31,11 @@ class TestAddToLocalStorage(TestCase):
     def test_executes_expected_javascript(self):
         spy = FakeWebdriver()
         self.context.inject(webdriver, spy)
-        key = 'my favorite things'
-        value = 'candy when it rots, dirty smelly socks, and pot'
+        key = "my favorite things"
+        value = "candy when it rots, dirty smelly socks, and pot"
         Browser().add_to_local_storage(key=key, value=value)
-        expect(spy.script_executed).to(
-            equal("window.localStorage.setItem('%s', '%s');" % (key, value)))
+        expect(spy.script_executed).to(equal("window.localStorage.setItem('%s', '%s');" % (key, value)))
 
 
-if '__main__' == __name__:
+if "__main__" == __name__:
     main()

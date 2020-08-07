@@ -12,12 +12,10 @@ from questions_three_selenium.browser import Browser
 from questions_three_selenium.browser_stack_tunnel import BrowserStackTunnel
 
 # Actual error message from WebDriver
-ERROR_MESSAGE = '[browserstack.local] is set to true but local testing ' \
-    'through BrowserStack is not connected'
+ERROR_MESSAGE = "[browserstack.local] is set to true but local testing " "through BrowserStack is not connected"
 
 
 class FakeWebdriver:
-
     def __init__(self):
         self.init_exception = None
 
@@ -31,7 +29,6 @@ class FakeWebdriver:
 
 
 class TestTunnelTimeout(TestCase):
-
     def setUp(self):
         self.context = open_dependency_context(supply_env=True, supply_fs=True)
         self.context.inject(HttpClient, EndlessFake())
@@ -39,11 +36,12 @@ class TestTunnelTimeout(TestCase):
         self.fake_webdriver = FakeWebdriver()
         self.context.inject(webdriver, self.fake_webdriver)
         self.context.set_env(
-            BROWSER_LOCATION='BrowserStack',
-            BROWSERSTACK_ACCESS_KEY='whatever',
-            BROWSERSTACK_SET_LOCAL='true',
-            BROWSERSTACK_URL='gopher:veronica',
-            BROWSERSTACK_USERNAME='giggles')
+            BROWSER_LOCATION="BrowserStack",
+            BROWSERSTACK_ACCESS_KEY="whatever",
+            BROWSERSTACK_SET_LOCAL="true",
+            BROWSERSTACK_URL="gopher:veronica",
+            BROWSERSTACK_USERNAME="giggles",
+        )
 
     def tearDown(self):
         self.context.close()
@@ -51,12 +49,11 @@ class TestTunnelTimeout(TestCase):
     def test_waits_up_to_timeout(self):
         timeout = 1
         self.context.set_env(browserstack_tunnel_timeout=timeout)
-        self.fake_webdriver.init_exception = WebDriverException(
-            ERROR_MESSAGE)
+        self.fake_webdriver.init_exception = WebDriverException(ERROR_MESSAGE)
         clock = TimeController(target=Browser, parent_context=self.context)
         clock.start()
         sleep(0.05)  # Give the SUT a chance to start
-        clock.advance(seconds=timeout-0.01)
+        clock.advance(seconds=timeout - 0.01)
         sleep(0.05)  # Give the SUT a chance to cycle
         self.fake_webdriver.init_exception = None
         clock.join()
@@ -75,5 +72,5 @@ class TestTunnelTimeout(TestCase):
         expect(clock.exception_caught).to(equal(e))
 
 
-if '__main__' == __name__:
+if "__main__" == __name__:
     main()

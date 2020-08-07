@@ -10,7 +10,6 @@ from .job import Job
 
 
 class Pool:
-
     def __init__(self, limit):
         self._limit = limit
         self._running = []
@@ -27,10 +26,10 @@ class Pool:
             elif exit_code > 0:
                 self.failure_count += 1
         self._running = running
-        self._log.debug('In progress: %s' % str([job.name for job in running]))
+        self._log.debug("In progress: %s" % str([job.name for job in running]))
 
     def add(self, suite_filename):
-        self._log.info('Executing %s\n' % suite_filename)
+        self._log.info("Executing %s\n" % suite_filename)
         job = Job(path_to_script=suite_filename, output_stream=self._stdout)
         job.run()
         self._running.append(job)
@@ -45,7 +44,7 @@ class Pool:
         while self._running:
             if expiry and dependency(datetime).now() > expiry:
                 self._kill_jobs()
-                raise TimeoutError('Tests ran longer than the configured limit')
+                raise TimeoutError("Tests ran longer than the configured limit")
             sleep(throttle)
             self._prune()
 

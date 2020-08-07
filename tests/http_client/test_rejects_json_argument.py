@@ -26,9 +26,8 @@ class TestRejectsJsonArgument(TestCase):
         self.context.close()
 
     def test_raises_not_implemented(self):
-        expect(partial(HttpClient().post, 'http://spam', json={'spam': 1})).to(
-            raise_ex(NotImplementedError))
+        expect(partial(HttpClient().post, "http://spam", json={"spam": 1})).to(raise_ex(NotImplementedError))
 
 
-if '__main__' == __name__:
+if "__main__" == __name__:
     main()

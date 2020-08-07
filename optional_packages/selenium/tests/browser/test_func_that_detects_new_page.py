@@ -11,13 +11,12 @@ class StubWebdriver:
         self.html_elements = []
 
     def find_elements_by_tag_name(self, tag_name):
-        if 'html' == tag_name:
+        if "html" == tag_name:
             return self.html_elements
         return []
 
 
 class TestFuncThatDetectsNewPage(TestCase):
-
     def setUp(self):
         self.context = open_dependency_context()
         self.stub_webdriver = StubWebdriver()
@@ -31,7 +30,7 @@ class TestFuncThatDetectsNewPage(TestCase):
         sut = Browser()
         self.stub_webdriver.html_elements = [html_elements]
         change_detected = sut.func_that_detects_new_page()
-        assert not change_detected(), 'Detected a non-existent change'
+        assert not change_detected(), "Detected a non-existent change"
 
     def test_func_returns_true_after_html_change(self):
         old_htmls = [object()]
@@ -40,8 +39,8 @@ class TestFuncThatDetectsNewPage(TestCase):
         self.stub_webdriver.html_elements = old_htmls
         change_detected = sut.func_that_detects_new_page()
         self.stub_webdriver.html_elements = new_htmls
-        assert change_detected(), 'Failed to detect a change'
+        assert change_detected(), "Failed to detect a change"
 
 
-if '__main__' == __name__:
+if "__main__" == __name__:
     main()

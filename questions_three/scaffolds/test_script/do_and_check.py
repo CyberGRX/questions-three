@@ -4,13 +4,13 @@ from .test import test
 
 
 def funcname(f):
-    return f.__name__.replace('_', ' ')
+    return f.__name__.replace("_", " ")
 
 
 def identify(thing):
     attrs = dir(thing)
-    if 'func' in attrs and 'args' in attrs:
-        return '%s with %s' % (funcname(thing.func), thing.args)
+    if "func" in attrs and "args" in attrs:
+        return "%s with %s" % (funcname(thing.func), thing.args)
     return funcname(thing)
 
 
@@ -26,7 +26,7 @@ def do_and_check(*, do, checks):
     except Exception as e:
         err_from_do = e
     for check in checks:
-        with test('%s and %s' % (identify(do), identify(check))):
+        with test("%s and %s" % (identify(do), identify(check))):
             if err_from_do:
                 skip('Skipping check because "do" function failed')
             else:

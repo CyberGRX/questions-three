@@ -12,10 +12,10 @@ def call_if_alive(ref, **kwargs):
     log = logger_for_module(__name__)
     func = ref()
     if func:
-        log.debug(f'Executing {func}')
+        log.debug(f"Executing {func}")
         try:
             func(**kwargs)
-            log.debug(f'{func} exited cleanly')
+            log.debug(f"{func} exited cleanly")
         except Exception as e:
             log.error(format_exception(e))
 
@@ -25,11 +25,10 @@ def current_time():
 
 
 def is_bound(func):
-    return hasattr(func, '__self__') and func.__self__
+    return hasattr(func, "__self__") and func.__self__
 
 
 class EventBroker:
-
     @classmethod
     def get_subscribers(cls):
         """
@@ -50,9 +49,7 @@ class EventBroker:
         log.debug(event)
         if event in cls._subscribers.keys():
             for subscriber in cls._subscribers[event]:
-                call_if_alive(
-                    subscriber, event=event, event_time=event_time,
-                    run_id=run_id, **kwargs)
+                call_if_alive(subscriber, event=event, event_time=event_time, run_id=run_id, **kwargs)
 
     @classmethod
     def reset(cls):
@@ -71,8 +68,7 @@ class EventBroker:
     @classmethod
     def subscribe(cls, *, func, event=None, events=None):
         if not (bool(event) ^ bool(events)):
-            raise TypeError(
-                'An event or events must be specified (but not both)')
+            raise TypeError("An event or events must be specified (but not both)")
         if events:
             for event in events:
                 cls._subscribe(func=func, event=event)

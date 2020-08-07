@@ -5,7 +5,7 @@ import sys
 
 
 def flatten(obj):
-    if hasattr(obj, 'to_dict'):
+    if hasattr(obj, "to_dict"):
         return obj.to_dict()
     if isinstance(obj, list):
         return [flatten(x) for x in obj]
@@ -15,13 +15,13 @@ def flatten(obj):
 def to_json_serializable(obj):
     if obj is None:
         return obj
-    if hasattr(obj, 'items'):
+    if hasattr(obj, "items"):
         return {k: to_json_serializable(v) for k, v in obj.items()}
     if isinstance(obj, list):
         return [to_json_serializable(i) for i in obj]
     if type(obj) in (int, float, complex):
         return obj
-    return(str(obj))
+    return str(obj)
 
 
 class Structure(Mapping):
@@ -37,15 +37,13 @@ class Structure(Mapping):
     def _inflate_if_mapping(cls, obj):
         if isinstance(obj, list):
             return [cls._inflate_if_mapping(o) for o in obj]
-        if {'keys', 'values', 'items'} <= set(dir(obj)):
+        if {"keys", "values", "items"} <= set(dir(obj)):
             return cls(**obj)
         return obj
 
     def __init__(self, **kwargs):
         self._hash = randrange(sys.maxsize)
-        self._members = {
-            k: self._inflate_if_mapping(v)
-            for k, v in kwargs.items()}
+        self._members = {k: self._inflate_if_mapping(v) for k, v in kwargs.items()}
 
     def __getattr__(self, name):
         if name in self._members.keys():
@@ -53,14 +51,14 @@ class Structure(Mapping):
         raise AttributeError('I have no "%s"' % name)
 
     def __eq__(self, other):
-        if not hasattr(other, 'keys'):
+        if not hasattr(other, "keys"):
             return False
         my_keys = self.keys()
         other_keys = other.keys()
-        return(
-            len(my_keys) == len(other_keys) and
-            all([k in other_keys for k in my_keys]) and
-            all([self[k] == other[k] for k in my_keys])
+        return (
+            len(my_keys) == len(other_keys)
+            and all([k in other_keys for k in my_keys])
+            and all([self[k] == other[k] for k in my_keys])
         )
 
     def __hash__(self):
@@ -76,10 +74,10 @@ class Structure(Mapping):
         return len(self._members)
 
     def __repr__(self):
-        return 'Structure: %s' % self.to_dict()
+        return "Structure: %s" % self.to_dict()
 
     def __setattr__(self, key, value):
-        if key.startswith('_'):
+        if key.startswith("_"):
             self.__dict__[key] = value
         else:
             self._members[key] = value
@@ -88,9 +86,7 @@ class Structure(Mapping):
         self._members[key] = value
 
     def _child_structures(self):
-        return [
-            val for val in self.values()
-            if isinstance(val, self.__class__)]
+        return [val for val in self.values() if isinstance(val, self.__class__)]
 
     def find(self, key):
         if key in self.keys():
@@ -108,18 +104,13 @@ class Structure(Mapping):
         return self._members.keys()
 
     def to_dict(self):
-        return {
-            k: flatten(v)
-            for k, v in self.items()}
+        return {k: flatten(v) for k, v in self.items()}
 
     def to_json(self):
         try:
-            return json.dumps(
-                {
-                    k: to_json_serializable(v)
-                    for k, v in self.to_dict().items()})
+            return json.dumps({k: to_json_serializable(v) for k, v in self.to_dict().items()})
         except TypeError as e:
-            raise TypeError('%s\n%s' % (e, repr(self))) from e
+            raise TypeError("%s\n%s" % (e, repr(self))) from e
 
     def values(self):
         return self._members.values()

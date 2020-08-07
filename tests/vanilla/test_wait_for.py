@@ -12,7 +12,6 @@ class SomeException(RuntimeError):
 
 
 class TestWaitForExpectedCondition(TestCase):
-
     def setUp(self):
         self.context = open_dependency_context()
 
@@ -30,15 +29,11 @@ class TestWaitForExpectedCondition(TestCase):
             return False
 
         def do_it():
-            wait_for(
-                func=func,
-                timeout=timeout,
-                throttle=throttle
-            )
+            wait_for(func=func, timeout=timeout, throttle=throttle)
 
         tc = TimeController(target=do_it)
         tc.start()
-        tc.advance(seconds=timeout-0.1)
+        tc.advance(seconds=timeout - 0.1)
         last_check = calls
         sleep(2 * throttle)
         expect(calls).to(be_above(last_check))
@@ -54,11 +49,7 @@ class TestWaitForExpectedCondition(TestCase):
             return False
 
         def do_it():
-            wait_for(
-                func=func,
-                timeout=timeout,
-                throttle=throttle
-            )
+            wait_for(func=func, timeout=timeout, throttle=throttle)
 
         tc = TimeController(target=do_it)
         tc.start()
@@ -79,11 +70,7 @@ class TestWaitForExpectedCondition(TestCase):
 
         self.context.inject(sleep, sleep_spy)
         try:
-            wait_for(
-                func=do_it,
-                timeout=throttle*5,
-                throttle=throttle
-            )
+            wait_for(func=do_it, timeout=throttle * 5, throttle=throttle)
         except TimeoutError:
             pass
         expect(slept_for).to(equal(throttle))
@@ -95,15 +82,11 @@ class TestWaitForExpectedCondition(TestCase):
             return True
 
         def do_it():
-            return wait_for(
-                func=func,
-                timeout=throttle * 5,
-                throttle=throttle
-            )
+            return wait_for(func=func, timeout=throttle * 5, throttle=throttle)
 
         response = do_it()
         expect(response).to(equal(None))
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     main()

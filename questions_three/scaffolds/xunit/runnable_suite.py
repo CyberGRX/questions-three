@@ -1,6 +1,6 @@
 def bind_attributes(obj, attrs):
     for k, v in attrs.items():
-        if not isinstance(v, type) and '__call__' in dir(v):
+        if not isinstance(v, type) and "__call__" in dir(v):
             bind_method(obj, k, v)
         else:
             setattr(obj, k, v)
@@ -11,15 +11,14 @@ def bind_method(obj, name, func):
 
 
 class RunnableSuite:
-
     def __init__(self, attrs):
-        self.__dict__['_suite_context'] = {}
+        self.__dict__["_suite_context"] = {}
         bind_attributes(self, attrs)
 
     def __getattr__(self, name):
         if name in self._suite_context.keys():
             return self._suite_context[name]
-        if name in ['setup', 'setup_suite', 'teardown', 'teardown_suite']:
+        if name in ["setup", "setup_suite", "teardown", "teardown_suite"]:
             # Default setup and teardown methods.
             # We can't define these with the typical "def" construct
             # because this would supercede __getattr__ and prevent

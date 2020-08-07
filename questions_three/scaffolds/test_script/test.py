@@ -14,12 +14,9 @@ def test(name):
     try:
         yield
     except TestSkipped as e:
-        broker.publish(
-            event=TestEvent.test_skipped, test_name=name, exception=e)
+        broker.publish(event=TestEvent.test_skipped, test_name=name, exception=e)
     except AssertionError as e:
-        broker.publish(
-            event=TestEvent.test_failed, test_name=name, exception=e)
+        broker.publish(event=TestEvent.test_failed, test_name=name, exception=e)
     except Exception as e:
-        broker.publish(
-            event=TestEvent.test_erred, test_name=name, exception=e)
+        broker.publish(event=TestEvent.test_erred, test_name=name, exception=e)
     broker.publish(event=TestEvent.test_ended, test_name=name)

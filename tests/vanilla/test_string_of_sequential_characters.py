@@ -7,36 +7,29 @@ from questions_three.vanilla import string_of_sequential_characters
 
 
 class TestGenerateRandomString(TestCase):
-
     def test_generates_correct_string_length(self):
         expected_length = 84
 
-        generated = string_of_sequential_characters(
-            character_count=expected_length)
+        generated = string_of_sequential_characters(character_count=expected_length)
 
         expect(len(generated)).to(equal(expected_length))
 
     def test_same_string_returned_with_different_calls(self):
-        generated1 = string_of_sequential_characters(
-            character_count=100)
-        generated2 = string_of_sequential_characters(
-            character_count=100)
+        generated1 = string_of_sequential_characters(character_count=100)
+        generated2 = string_of_sequential_characters(character_count=100)
 
         expect(generated1).to(equal(generated2))
 
     def test_generates_string_with_100000_characters(self):
         expected_length = 100000
 
-        generated = string_of_sequential_characters(
-            character_count=expected_length)
+        generated = string_of_sequential_characters(character_count=expected_length)
 
         expect(len(generated)).to(equal(expected_length))
 
     def test_same_100000_character_string_returned_with_different_calls(self):
-        generated1 = string_of_sequential_characters(
-            character_count=100000)
-        generated2 = string_of_sequential_characters(
-            character_count=100000)
+        generated1 = string_of_sequential_characters(character_count=100000)
+        generated2 = string_of_sequential_characters(character_count=100000)
 
         expect(generated1).to(equal(generated2))
 
@@ -53,5 +46,5 @@ class TestGenerateRandomString(TestCase):
         expect(test).to(raise_ex(TypeError))
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     main()

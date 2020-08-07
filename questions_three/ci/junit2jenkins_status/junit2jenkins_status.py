@@ -7,20 +7,19 @@ from .status import ERROR, FAIL, PASS
 
 
 def locate_suite(root):
-    return root if 'testsuite' == root.tag \
-        else root.find(".//testsuite")
+    return root if "testsuite" == root.tag else root.find(".//testsuite")
 
 
 def extract_status(filename):
-    with dependency(open)(filename, 'r') as f:
+    with dependency(open)(filename, "r") as f:
         xml = f.read().strip()
     root = ElementTree.fromstring(xml)
     suite = locate_suite(root)
     if suite is not None:
         keys = suite.attrib.keys()
-        if 'failures' in keys and int(suite.attrib['failures']):
+        if "failures" in keys and int(suite.attrib["failures"]):
             return FAIL
-        if 'errors' in keys and int(suite.attrib['errors']):
+        if "errors" in keys and int(suite.attrib["errors"]):
             return ERROR
     return PASS
 
@@ -33,7 +32,7 @@ def junit2jenkins_status(*, path):
     erred = False
     for dirpath, dirnames, filenames in walk(path):
         for fn in filenames:
-            if not fn.lower().endswith('.xml'):
+            if not fn.lower().endswith(".xml"):
                 continue
             status = extract_status(os.path.join(dirpath, fn))
             if ERROR == status:

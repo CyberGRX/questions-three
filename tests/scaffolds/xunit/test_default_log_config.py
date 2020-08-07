@@ -6,14 +6,12 @@ from twin_sister import open_dependency_context
 
 from twin_sister.expects_matchers import contain_key_with_value
 from questions_three.logging.constants import MESSAGE_FORMAT
-from questions_three.scaffolds \
-    import disable_default_reporters, enable_default_reporters
+from questions_three.scaffolds import disable_default_reporters, enable_default_reporters
 from questions_three.scaffolds.xunit import TestSuite
 from twin_sister.fakes import EmptyFake, empty_context_manager
 
 
 class FakeLogging(EmptyFake):
-
     def __init__(self):
         super().__init__()
         self.config_history = []
@@ -23,7 +21,6 @@ class FakeLogging(EmptyFake):
 
 
 class TestDefaultLogConfig(TestCase):
-
     def setUp(self):
         disable_default_reporters()
         self.context = open_dependency_context()
@@ -39,18 +36,20 @@ class TestDefaultLogConfig(TestCase):
         def wrapper():
             class MySuite(TestSuite):
                 pass
+
         wrapper()
         args, kwargs = self.fake_logging.config_history[-1]
-        expect(kwargs).to(contain_key_with_value('level', logging.INFO))
+        expect(kwargs).to(contain_key_with_value("level", logging.INFO))
 
     def test_sets_expected_format(self):
         def wrapper():
             class MySuite(TestSuite):
                 pass
+
         wrapper()
         args, kwargs = self.fake_logging.config_history[-1]
-        expect(kwargs).to(contain_key_with_value('format', MESSAGE_FORMAT))
+        expect(kwargs).to(contain_key_with_value("format", MESSAGE_FORMAT))
 
 
-if '__main__' == __name__:
+if "__main__" == __name__:
     main()

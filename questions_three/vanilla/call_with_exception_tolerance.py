@@ -20,7 +20,7 @@ def call_with_exception_tolerance(func, *, tolerate, timeout, throttle):
     Return whatever func returns
     """
     # Convert all sequences to tuples so we can use them in an except statement
-    if hasattr(tolerate, '__iter__'):
+    if hasattr(tolerate, "__iter__"):
         tolerate = tuple(tolerate)
     sleep = dependency(time.sleep)
     expiry = now() + timedelta(seconds=timeout)

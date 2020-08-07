@@ -1,8 +1,7 @@
 from datetime import datetime
 
 from questions_three.constants import TestEvent, TestStatus
-from questions_three.event_broker import EventBroker, \
-    subscribe_event_handlers
+from questions_three.event_broker import EventBroker, subscribe_event_handlers
 
 from twin_sister import dependency
 
@@ -14,7 +13,6 @@ def current_time():
 
 
 class ResultCompiler:
-
     def __init__(self):
         self.results = SuiteResults()
 
@@ -43,13 +41,10 @@ class ResultCompiler:
 
     def on_suite_ended(self, **kwargs):
         self.results.suite_end_time = current_time()
-        EventBroker.publish(
-            event=TestEvent.suite_results_compiled,
-            suite_results=self.results)
+        EventBroker.publish(event=TestEvent.suite_results_compiled, suite_results=self.results)
 
     def on_suite_erred(self, exception=None, **kwargs):
-        self.results.suite_exception = exception or Exception(
-            'Suite erred.  No exception was provided.')
+        self.results.suite_exception = exception or Exception("Suite erred.  No exception was provided.")
 
     def on_test_ended(self, test_name, **kwargs):
         test = self._find_or_create_test(test_name)

@@ -14,15 +14,13 @@ HttpError = error.HttpError
 
 
 class FakeHttpResponse(EndlessFake):
-
     def __init__(self):
         super().__init__()
         self.status_code = 200
-        self.text = ''
+        self.text = ""
 
 
 class FakeRequests:
-
     def __init__(self, response):
         self.response = response
 
@@ -31,11 +29,10 @@ class FakeRequests:
 
 
 def send_get():
-    HttpClient().get('stuffed')
+    HttpClient().get("stuffed")
 
 
 class TestHttpErrors(TestCase):
-
     def setUp(self):
         self.context = open_dependency_context()
         self.response = FakeHttpResponse()
@@ -47,7 +44,7 @@ class TestHttpErrors(TestCase):
     def test_exception_contains_response(self):
         self.response.status_code = 400
         try:
-            HttpClient().get('http://something')
+            HttpClient().get("http://something")
         except HttpError as e:
             caught = e
         expect(caught.response).to(be(self.response))
@@ -57,15 +54,16 @@ class TestHttpErrors(TestCase):
         self.response.status_code = 400
         self.response.text = expected
         try:
-            HttpClient().get('http://whatever')
-            raise AssertionError('No exception was raised')
+            HttpClient().get("http://whatever")
+            raise AssertionError("No exception was raised")
         except HttpError as e:
             caught = e
         expect(str(caught)).to(contain(expected))
 
     def test_covers_delete(self):
         def attempt():
-            HttpClient().delete('something')
+            HttpClient().delete("something")
+
         self.response.status_code = 500
         expect(attempt).to(raise_ex(HttpError))
 
@@ -75,25 +73,29 @@ class TestHttpErrors(TestCase):
 
     def test_covers_head(self):
         def attempt():
-            HttpClient().head('something')
+            HttpClient().head("something")
+
         self.response.status_code = 500
         expect(attempt).to(raise_ex(HttpError))
 
     def test_covers_options(self):
         def attempt():
-            HttpClient().options('something')
+            HttpClient().options("something")
+
         self.response.status_code = 500
         expect(attempt).to(raise_ex(HttpError))
 
     def test_covers_post(self):
         def attempt():
-            HttpClient().post('something')
+            HttpClient().post("something")
+
         self.response.status_code = 500
         expect(attempt).to(raise_ex(HttpError))
 
     def test_covers_put(self):
         def attempt():
-            HttpClient().put('something')
+            HttpClient().put("something")
+
         self.response.status_code = 500
         expect(attempt).to(raise_ex(HttpError))
 
@@ -135,8 +137,7 @@ class TestHttpErrors(TestCase):
 
     def test_proxy_authentication_required_on_407(self):
         self.response.status_code = 407
-        expect(send_get).to(
-            raise_ex(error.HttpProxyAuthenticationRequired))
+        expect(send_get).to(raise_ex(error.HttpProxyAuthenticationRequired))
 
     def test_request_timeout_on_408(self):
         self.response.status_code = 408
@@ -200,8 +201,7 @@ class TestHttpErrors(TestCase):
 
     def test_http_version_not_supported_on_505(self):
         self.response.status_code = 505
-        expect(send_get).to(
-            raise_ex(error.HttpHttpVersionNotSupported))
+        expect(send_get).to(raise_ex(error.HttpHttpVersionNotSupported))
 
     def test_http_server_error_on_upper_5xx(self):
         self.response.status_code = 599
@@ -212,5 +212,5 @@ class TestHttpErrors(TestCase):
         expect(send_get).not_to(raise_ex(error.HttpError))
 
 
-if '__main__' == __name__:
+if "__main__" == __name__:
     main()

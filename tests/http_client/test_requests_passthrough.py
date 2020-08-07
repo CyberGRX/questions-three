@@ -15,7 +15,6 @@ class FakeResponse(EndlessFake):
 
 
 class TestRequestsPassthrough(TestCase):
-
     def setUp(self):
         self.context = open_dependency_context(supply_env=True)
         self.requests_spy = MasterSpy(FakeResponse())
@@ -27,11 +26,12 @@ class TestRequestsPassthrough(TestCase):
     def test_attribute_error_on_unknown_method(self):
         def attempt():
             HttpClient().this_method_does_not_exist
+
         expect(attempt).to(raise_ex(AttributeError))
 
     def check_request(self, method):
-        url = 'http://nothing'
-        kwargs = {'spam': 42, 'eggs': 0}
+        url = "http://nothing"
+        kwargs = {"spam": 42, "eggs": 0}
         getattr(HttpClient(), method)(url, **kwargs)
         req_args, req_kwargs = self.requests_spy.last_call_to(method)
         expect(req_args).to(equal((url,)))
@@ -39,49 +39,49 @@ class TestRequestsPassthrough(TestCase):
             expect(req_kwargs).to(contain_key_with_value(k, v))
 
     def check_response(self, method):
-        actual = getattr(HttpClient(), method)('http://something')
+        actual = getattr(HttpClient(), method)("http://something")
         spy = self.requests_spy.attribute_spies[method]
         expect(actual).to(equal(spy.return_value_spies[-1]))
 
     def test_delete_request(self):
-        self.check_request('delete')
+        self.check_request("delete")
 
     def test_delete_response(self):
-        self.check_response('delete')
+        self.check_response("delete")
 
     def test_get_request(self):
-        self.check_request('get')
+        self.check_request("get")
 
     def test_get_response(self):
-        self.check_response('get')
+        self.check_response("get")
 
     def test_head_request(self):
-        self.check_request('head')
+        self.check_request("head")
 
     def test_head_response(self):
-        self.check_response('head')
+        self.check_response("head")
 
     def test_options_request(self):
-        self.check_request('options')
+        self.check_request("options")
 
     def test_options_response(self):
-        self.check_response('options')
+        self.check_response("options")
 
     def test_patch_request(self):
-        self.check_response('patch')
+        self.check_response("patch")
 
     def test_post_request(self):
-        self.check_request('post')
+        self.check_request("post")
 
     def test_post_response(self):
-        self.check_response('post')
+        self.check_response("post")
 
     def test_put_request(self):
-        self.check_request('put')
+        self.check_request("put")
 
     def test_put_response(self):
-        self.check_response('put')
+        self.check_response("put")
 
 
-if '__main__' == __name__:
+if "__main__" == __name__:
     main()

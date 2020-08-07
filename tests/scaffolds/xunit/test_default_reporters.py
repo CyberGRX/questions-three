@@ -19,8 +19,7 @@ from questions_three.scaffolds.xunit import TestSuite
 def is_active(reporter_class):
     gc.collect()
     for candidate in EventBroker.get_subscribers():
-        if hasattr(candidate, '__self__') and \
-                isinstance(candidate.__self__, reporter_class):
+        if hasattr(candidate, "__self__") and isinstance(candidate.__self__, reporter_class):
             return True
     return False
 
@@ -38,7 +37,6 @@ def fake_open(filename, *args, **kwargs):
 
 
 class TestDefaultReporters(TestCase):
-
     def setUp(self):
         self.context = open_dependency_context(supply_logging=True)
         self.context.inject_as_class(os.makedirs, lambda *args, **kwargs: None)
@@ -50,10 +48,10 @@ class TestDefaultReporters(TestCase):
         def run_suite():
             class Suite(TestSuite):
                 def setup_suite(slf):
-                    for reporter in (
-                            ArtifactSaver, ResultCompiler, JunitReporter):
+                    for reporter in (ArtifactSaver, ResultCompiler, JunitReporter):
                         if is_active(reporter):
                             active_reporters_at_suite_start.append(reporter)
+
         run_suite()
         self.active = active_reporters_at_suite_start
 
@@ -70,5 +68,5 @@ class TestDefaultReporters(TestCase):
         expect(self.active).to(contain(JunitReporter))
 
 
-if '__main__' == __name__:
+if "__main__" == __name__:
     main()

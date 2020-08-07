@@ -22,11 +22,10 @@ class Job:
         self.name = path_to_script
 
     def _flush(self):
-        output = self._proc.stdout.read().decode('utf-8')
+        output = self._proc.stdout.read().decode("utf-8")
         if output.strip():
-            self._output_stream.write(
-                '\n** From %s **\n' % self._path_to_script)
-            self._output_stream.write('%s\n' % output)
+            self._output_stream.write("\n** From %s **\n" % self._path_to_script)
+            self._output_stream.write("%s\n" % output)
             self._output_stream.flush()
         self._last_flush = now()
 
@@ -34,9 +33,7 @@ class Job:
         return (now() - self._last_flush).total_seconds() > FLUSH_INTERVAL
 
     def run(self):
-        self._proc = dependency(Popen)(
-            [dependency(sys.executable), self._path_to_script],
-            stderr=STDOUT, stdout=PIPE)
+        self._proc = dependency(Popen)([dependency(sys.executable), self._path_to_script], stderr=STDOUT, stdout=PIPE)
         self._last_flush = now()
 
     def kill(self):

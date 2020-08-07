@@ -14,4 +14,4 @@ def string_of_sequential_characters(*, character_count):
             string += LETTERS_AND_NUMBERS[loop_count]
             loop_count += 1
         return string
-    raise TypeError('character_count must be of Type int and greater than 0')
+    raise TypeError("character_count must be of Type int and greater than 0")
