@@ -20,22 +20,17 @@ YML_FILENAME = loader.YML_FILENAME
 
 
 class FakeModule(EmptyFake):
-
     def __init__(self, *, context, name):
         self.__name__ = name
-        self.__file__ = context.os.path.join(
-            'fake', 'modules', name, '__init__.py')
+        self.__file__ = context.os.path.join("fake", "modules", name, "__init__.py")
         self._context = context
         context.create_file(self.__file__)
 
     def add_config(self, values):
-        self._context.create_file(
-            module_filename(self, YML_FILENAME),
-            text=yaml.dump(values))
+        self._context.create_file(module_filename(self, YML_FILENAME), text=yaml.dump(values))
 
 
 class TestConfigForModule(TestCase):
-
     def setUp(self):
         loader.UNIT_TEST_MODE = True
         self.context = open_dependency_context(supply_env=True, supply_fs=True)
@@ -51,9 +46,9 @@ class TestConfigForModule(TestCase):
         self.fake_sys.modules[module.__name__] = module
 
     def test_finds_config_file(self):
-        key = 'indicator'
-        value = 'squawk!'
-        module_name = 'parrot'
+        key = "indicator"
+        value = "squawk!"
+        module_name = "parrot"
         module = FakeModule(context=self.context, name=module_name)
         module.add_config({key: value})
         self.load_module(module)
@@ -62,16 +57,15 @@ class TestConfigForModule(TestCase):
         expect(config[key]).to(equal(value))
 
     def test_returns_empty_instance_when_module_has_no_config(self):
-        module_name = 'has_no_config'
+        module_name = "has_no_config"
         module = FakeModule(context=self.context, name=module_name)
         self.load_module(module)
         config = config_for_module(module_name)
         expect(config).to(be_a(ModuleCfg))
 
     def test_complains_when_module_not_found(self):
-        expect(partial(config_for_module, 'no_esta')).to(
-            complain(NoSuchRecord))
+        expect(partial(config_for_module, "no_esta")).to(complain(NoSuchRecord))
 
 
-if '__main__' == __name__:
+if "__main__" == __name__:
     main()

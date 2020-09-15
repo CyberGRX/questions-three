@@ -15,7 +15,6 @@ class Evidence:
 
 
 class Subscriber:
-
     def __init__(self):
         EventBroker.subscribe(event=EVENT, func=self.receiver)
 
@@ -24,7 +23,6 @@ class Subscriber:
 
 
 class TestMemoryLeakProtection(TestCase):
-
     def setUp(self):
         self.context = open_dependency_context()
         Evidence.subscriber_ran = False
@@ -44,34 +42,33 @@ class TestMemoryLeakProtection(TestCase):
         # be eligible for garbage collection.
         gc.collect()
         EventBroker.publish(event=EVENT)
-        assert not Evidence.subscriber_ran, \
-            'Subscriber ran after it should have been garbage collected'
+        assert not Evidence.subscriber_ran, "Subscriber ran after it should have been garbage collected"
 
     def test_unbound_subscriber_gets_garbage_collected(self):
         def subscriber():
             Evidence.subscriber_ran = True
+
         EventBroker.subscribe(event=EVENT, func=subscriber)
         subscriber = None
         gc.collect()
         EventBroker.publish(event=EVENT)
-        assert not Evidence.subscriber_ran, \
-            'Subscriber ran after it should have been garbage collected'
+        assert not Evidence.subscriber_ran, "Subscriber ran after it should have been garbage collected"
 
     def errors_logged(self):
-        if self.fake_log.attribute_was_requested('error'):
-            spy = self.fake_log.attribute_spies['error']
+        if self.fake_log.attribute_was_requested("error"):
+            spy = self.fake_log.attribute_spies["error"]
             return [args[0] for args, kwargs in spy.call_history]
 
     def test_does_not_attempt_to_run_garbage_collected_subscriber(self):
         def subscriber():
             pass
+
         EventBroker.subscribe(event=EVENT, func=subscriber)
         subscriber = None
         gc.collect()
         EventBroker.publish(event=EVENT)
-        assert not self.errors_logged(), \
-            'Unexpected errors in the log: "%s"' % (self.errors_logged())
+        assert not self.errors_logged(), 'Unexpected errors in the log: "%s"' % (self.errors_logged())
 
 
-if '__main__' == __name__:
+if "__main__" == __name__:
     main()

@@ -4,12 +4,10 @@ from expects import expect, raise_error
 
 from questions_three.constants import TestEvent
 from questions_three.exceptions import UndefinedEvent
-from questions_three.event_broker import EventBroker, \
-    subscribe_event_handlers
+from questions_three.event_broker import EventBroker, subscribe_event_handlers
 
 
 class TestSubscribEventHandlers(TestCase):
-
     def setUp(self):
         EventBroker.reset()
 
@@ -24,7 +22,7 @@ class TestSubscribEventHandlers(TestCase):
         thing = Thing()
         subscribe_event_handlers(thing)
         EventBroker.publish(event=TestEvent.test_skipped)
-        assert thing.was_called, 'Subscriber was not called'
+        assert thing.was_called, "Subscriber was not called"
 
     def test_complains_about_unrecognized_handler(self):
         class Thing:
@@ -42,6 +40,7 @@ class TestSubscribEventHandlers(TestCase):
 
         def attempt():
             subscribe_event_handlers(Thing())
+
         expect(attempt).not_to(raise_error(UndefinedEvent))
 
     def test_ignores_method_not_starting_with_on(self):
@@ -55,8 +54,8 @@ class TestSubscribEventHandlers(TestCase):
         thing = Thing()
         subscribe_event_handlers(thing)
         EventBroker.publish(event=TestEvent.test_skipped)
-        assert not thing.was_called, 'Handler was detected inapproprately'
+        assert not thing.was_called, "Handler was detected inapproprately"
 
 
-if '__main__' == __name__:
+if "__main__" == __name__:
     main()

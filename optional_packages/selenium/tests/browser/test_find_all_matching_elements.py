@@ -13,11 +13,10 @@ from questions_three_selenium.browser import Browser
 
 
 class FakeElement:
-    text = 'something'
+    text = "something"
 
 
 class FakeWebDriver(EndlessFake):
-
     def __init__(self, *args, **kwargs):
         super().__init__()
         self.last_find_args = None
@@ -38,7 +37,6 @@ class FakeWebDriver(EndlessFake):
 
 
 class TestFindAllMatchingElements(TestCase):
-
     def setUp(self):
         self.context = open_dependency_context(supply_env=True)
         self.fake_webdriver = FakeWebDriver()
@@ -48,29 +46,25 @@ class TestFindAllMatchingElements(TestCase):
         self.context.close()
 
     def test_transforms_qa_id_selector(self):
-        Browser().find_all_matching_elements(qa_id='sausage')
-        expect(self.fake_webdriver.last_find_args).to(
-            equal((By.XPATH, "//*[@data-qa='sausage']")))
+        Browser().find_all_matching_elements(qa_id="sausage")
+        expect(self.fake_webdriver.last_find_args).to(equal((By.XPATH, "//*[@data-qa='sausage']")))
 
     def test_passes_other_selector_through_to_find_elements(self):
-        tag_name = 'center'
+        tag_name = "center"
         Browser().find_all_matching_elements(tag_name=tag_name)
-        expect(self.fake_webdriver.last_find_args).to(
-            equal((By.TAG_NAME, tag_name)))
+        expect(self.fake_webdriver.last_find_args).to(equal((By.TAG_NAME, tag_name)))
 
     def test_returns_list_from_find_elements(self):
         thing1 = object()
         thing2 = object()
         expected = [thing1, thing2]
         self.fake_webdriver.matching_elements = expected
-        expect(Browser().find_all_matching_elements(id='spam')).to(
-            equal(expected))
+        expect(Browser().find_all_matching_elements(id="spam")).to(equal(expected))
 
     def test_raises_no_such_element_when_list_empty(self):
         self.fake_webdriver.matching_elements = []
-        expect(partial(Browser().find_all_matching_elements, id='spam')).to(
-            raise_ex(NoSuchElementException))
+        expect(partial(Browser().find_all_matching_elements, id="spam")).to(raise_ex(NoSuchElementException))
 
 
-if '__main__' == __name__:
+if "__main__" == __name__:
     main()

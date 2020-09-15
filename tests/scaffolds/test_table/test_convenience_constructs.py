@@ -7,7 +7,6 @@ import questions_three.scaffolds.test_table as test_table
 
 
 class TestConvenienceConstructs(TestCase):
-
     def test_precondition_is_available_from_module(self):
         expect(test_table.precondition).to(be(common.precondition))
 
@@ -15,5 +14,5 @@ class TestConvenienceConstructs(TestCase):
         expect(test_table.skip).to(be(common.skip))
 
 
-if '__main__' == __name__:
+if "__main__" == __name__:
     main()

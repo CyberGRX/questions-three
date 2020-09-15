@@ -9,7 +9,6 @@ from questions_three.http_client import HttpClient
 
 
 class TestDisableInSession(TestCase):
-
     def setUp(self):
         self.context = open_dependency_context()
         requests_stub = EndlessFake(pattern_obj=requests)
@@ -25,24 +24,24 @@ class TestDisableInSession(TestCase):
     def check_disables_redirect(self, method):
         client = HttpClient()
         client.enable_cookies()
-        getattr(client, method)('http://something')
-        expect(self.send_spy['allow_redirects']).to(be(False))
+        getattr(client, method)("http://something")
+        expect(self.send_spy["allow_redirects"]).to(be(False))
 
     def test_disables_redirects_on_get(self):
-        self.check_disables_redirect('get')
+        self.check_disables_redirect("get")
 
     def test_disables_redirects_on_post(self):
-        self.check_disables_redirect('post')
+        self.check_disables_redirect("post")
 
     def test_disables_redirects_on_put(self):
-        self.check_disables_redirect('put')
+        self.check_disables_redirect("put")
 
     def test_disables_redirects_on_head(self):
-        self.check_disables_redirect('head')
+        self.check_disables_redirect("head")
 
     def test_disables_redirects_on_delete(self):
-        self.check_disables_redirect('delete')
+        self.check_disables_redirect("delete")
 
 
-if '__main__' == __name__:
+if "__main__" == __name__:
     main()

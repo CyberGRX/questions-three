@@ -7,7 +7,6 @@ from twin_sister.expects_matchers import contain_all_items_in
 
 
 class Subscriber:
-
     def __init__(self, event=None):
         self.received = []
         if event:
@@ -21,35 +20,32 @@ class Subscriber:
 
 
 class TestPublishAndSubscribe(TestCase):
-
     def setUp(self):
         EventBroker.reset()
 
     def test_first_subscriber_receives_message_on_expected_event(self):
         subscriber = Subscriber()
-        event = 'cabbages'
+        event = "cabbages"
         subscriber.subscribe(event)
         EventBroker.publish(event=event)
         expect(subscriber.received).to(have_length(1))
 
     def test_third_subscriber_receives_message_on_expected_event(self):
-        event = 'kings'
-        subscribers = [
-            Subscriber(event)
-            for n in range(3)]
+        event = "kings"
+        subscribers = [Subscriber(event) for n in range(3)]
         EventBroker.publish(event=event)
         expect(subscribers[2].received).to(have_length(1))
 
     def test_subscriber_does_not_receive_message_on_unexpected_event(self):
-        expected_event = 'the larch'
-        unexpected_event = 'the spinach imposition'
+        expected_event = "the larch"
+        unexpected_event = "the spinach imposition"
         subscriber = Subscriber(expected_event)
         EventBroker.publish(event=unexpected_event)
         expect(subscriber.received).to(have_length(0))
 
     def test_subscriber_receives_arbitrary_keyword_arguments(self):
-        kwargs = {'spam': 42, 'eggs': (1, 2, 3, 4, 5), 'beans': 'off'}
-        event = 'dance'
+        kwargs = {"spam": 42, "eggs": (1, 2, 3, 4, 5), "beans": "off"}
+        event = "dance"
         subscriber = Subscriber(event)
         EventBroker.publish(event=event, **kwargs)
         received = subscriber.received
@@ -71,5 +67,5 @@ class TestPublishAndSubscribe(TestCase):
         expect(subscriber.received).not_to(be_empty)
 
 
-if '__main__' == __name__:
+if "__main__" == __name__:
     main()

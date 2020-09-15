@@ -9,7 +9,6 @@ from twin_sister.fakes import EndlessFake
 
 
 class TestInit(TestCase):
-
     def setUp(self):
         self.context = open_dependency_context(supply_env=True, supply_logging=True)
 
@@ -18,14 +17,11 @@ class TestInit(TestCase):
 
     def test_initializes_client_with_given_http_client(self):
         expected_http_client = HttpClient()
-        graph_client = GraphqlClient(http_client=expected_http_client, url='not important')
+        graph_client = GraphqlClient(http_client=expected_http_client, url="not important")
 
         expect(graph_client.http_client).to(equal(expected_http_client))
 
-    @parameterized.expand([
-        'https://its.aaa/graph',
-        'https://still.aaa/graph'
-    ])
+    @parameterized.expand(["https://its.aaa/graph", "https://still.aaa/graph"])
     def test_initializes_client_with_given_url(self, url):
         expected_url = url
         graph_client = GraphqlClient(http_client=EndlessFake(), url=expected_url)
@@ -33,5 +29,5 @@ class TestInit(TestCase):
         expect(graph_client.url).to(equal(expected_url))
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     main()

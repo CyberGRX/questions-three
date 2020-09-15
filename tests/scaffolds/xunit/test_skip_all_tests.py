@@ -5,8 +5,7 @@ from expects import expect, contain, equal
 from twin_sister import open_dependency_context
 
 from questions_three.constants import TestEvent
-from questions_three.event_broker import EventBroker, \
-    subscribe_event_handlers
+from questions_three.event_broker import EventBroker, subscribe_event_handlers
 from questions_three.exceptions import TestSkipped
 from questions_three.scaffolds.xunit import TestSuite
 from twin_sister.fakes import EmptyFake
@@ -21,9 +20,7 @@ class TestSkipAllTests(TestCase):
     """
 
     def run_suite(self):
-
         class SkippedSuite(TestSuite):
-
             def setup_suite(suite):
                 raise TestSkipped(self.skip_msg)
 
@@ -46,13 +43,12 @@ class TestSkipAllTests(TestCase):
                 pass
 
     def setUp(self):
-        self.context = open_dependency_context(
-            supply_env=True, supply_fs=True, supply_logging=True)
+        self.context = open_dependency_context(supply_env=True, supply_fs=True, supply_logging=True)
         self.context.inject(StreamHandler, EmptyFake())
         EventBroker.reset()
         subscribe_event_handlers(self)
         self.skip_events = 0
-        self.skip_msg = 'intentional'
+        self.skip_msg = "intentional"
         self.suite_teardown_ran = False
         self.test_setup_ran = False
         self.test_teardown_ran = False
@@ -69,15 +65,15 @@ class TestSkipAllTests(TestCase):
 
     def test_does_not_run_test_setup(self):
         self.run_suite()
-        assert not self.test_setup_ran, 'Setup ran'
+        assert not self.test_setup_ran, "Setup ran"
 
     def test_does_not_run_test_teardown(self):
         self.run_suite()
-        assert not self.test_teardown_ran, 'Teardown ran'
+        assert not self.test_teardown_ran, "Teardown ran"
 
     def test_does_not_run_suite_teardown(self):
         self.run_suite()
-        assert not self.suite_teardown_ran, 'Teardown ran'
+        assert not self.suite_teardown_ran, "Teardown ran"
 
     def test_repeats_skip_message_for_tests(self):
         caught = None
@@ -86,13 +82,12 @@ class TestSkipAllTests(TestCase):
             nonlocal caught
             caught = exception
 
-        EventBroker.subscribe(
-            event=TestEvent.test_skipped, func=on_test_skipped)
+        EventBroker.subscribe(event=TestEvent.test_skipped, func=on_test_skipped)
 
         self.skip_msg = "Sometimes you feel like a nut.  Sometimes you don't."
         self.run_suite()
         expect(str(caught)).to(contain(self.skip_msg))
 
 
-if '__main__' == __name__:
+if "__main__" == __name__:
     main()

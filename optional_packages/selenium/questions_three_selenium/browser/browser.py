@@ -20,7 +20,6 @@ def current_time():
 
 
 class Browser:
-
     def __init__(self):
         self._log = dependency(logger_for_module)(__name__)
         config = config_for_module(__name__)
@@ -34,17 +33,15 @@ class Browser:
         """
         Add an item to HTML 5 local storage
         """
-        self._driver.execute_script(
-            "window.localStorage.setItem('%s', '%s');" % (key, value))
+        self._driver.execute_script("window.localStorage.setItem('%s', '%s');" % (key, value))
 
     def find_all_matching_elements(self, **kwargs):
         elements = self._driver.find_elements(*kwargs2selector(**kwargs))
         if not elements:
-            raise NoSuchElementException('Nothing matched %s' % kwargs)
+            raise NoSuchElementException("Nothing matched %s" % kwargs)
         return elements
 
-    def find_unique_element(
-            self, *, timeout=None, **kwargs):
+    def find_unique_element(self, *, timeout=None, **kwargs):
         if timeout is None:
             timeout = self.element_find_timeout
         expiry = current_time() + timedelta(seconds=timeout)
@@ -56,8 +53,7 @@ class Browser:
             elif 1 == count:
                 return elements[0]
             elif 1 < count:
-                raise TooManyElements(
-                    'Found %d elements matching %s' % (count, kwargs))
+                raise TooManyElements("Found %d elements matching %s" % (count, kwargs))
 
     def on_suite_erred(self, **kwargs):
         self._failure_detected = True
@@ -73,37 +69,33 @@ class Browser:
 
     def on_suite_ended(self, **kwargs):
         config = config_for_module(__name__)
-        if not (
-                self._failure_detected and
-                config.suppress_browser_exit_on_failure):
+        if not (self._failure_detected and config.suppress_browser_exit_on_failure):
             self._driver.quit()
 
-    def publish_dom_dump(
-            self, artifact_group=None, suite_name=None, test_name=None,
-            **kwargs):
+    def publish_dom_dump(self, artifact_group=None, suite_name=None, test_name=None, **kwargs):
         EventBroker.publish(
             artifact_group=artifact_group,
             event=TestEvent.artifact_created,
             artifact=dependency(dump_dom)(self),
-            artifact_mime_type='text/html',
-            artifact_type='dom_dump',
+            artifact_mime_type="text/html",
+            artifact_type="dom_dump",
             suite_name=suite_name,
-            test_name=test_name)
+            test_name=test_name,
+        )
 
-    def publish_screenshot(
-            self, artifact_group=None, suite_name=None, test_name=None,
-            **kwargs):
+    def publish_screenshot(self, artifact_group=None, suite_name=None, test_name=None, **kwargs):
         EventBroker.publish(
             artifact_group=artifact_group,
             event=TestEvent.artifact_created,
             suite_name=suite_name,
             test_name=test_name,
             artifact=self._driver.get_screenshot_as_png(),
-            artifact_type='screenshot',
-            artifact_mime_type='image/png')
+            artifact_type="screenshot",
+            artifact_mime_type="image/png",
+        )
 
     def top_html_element(self):
-        htmls = self._driver.find_elements_by_tag_name('html')
+        htmls = self._driver.find_elements_by_tag_name("html")
         if htmls:
             return htmls[0]
 
@@ -118,14 +110,14 @@ class Browser:
         Return a function that returns true if the browser has navigated
         to a new page.
         """
-        old_htmls = self._driver.find_elements_by_tag_name('html')
+        old_htmls = self._driver.find_elements_by_tag_name("html")
 
         def func():
-            return (
-                self._driver.find_elements_by_tag_name('html') != old_htmls)
+            return self._driver.find_elements_by_tag_name("html") != old_htmls
+
         return func
 
     def __getattr__(self, attr):
-        if '_driver' == attr:
+        if "_driver" == attr:
             raise AttributeError(attr)
         return getattr(self._driver, attr)

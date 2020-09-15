@@ -12,14 +12,11 @@ from questions_three.reporters.artifact_saver import ArtifactSaver
 from twin_sister.fakes import MasterSpy
 
 
-def publish(content='spam', filename='spam'):
-    EventBroker.publish(
-            event=TestEvent.report_created,
-            report_content=content, report_filename=filename)
+def publish(content="spam", filename="spam"):
+    EventBroker.publish(event=TestEvent.report_created, report_content=content, report_filename=filename)
 
 
 class FakeFile:
-
     def __init__(self):
         self.filename = None
         self.mode = None
@@ -36,7 +33,6 @@ class FakeFile:
 
 
 class TestReportSaving(TestCase):
-
     def setUp(self):
         EventBroker.reset()
         self.context = open_dependency_context(supply_env=True, supply_fs=True)
@@ -51,7 +47,7 @@ class TestReportSaving(TestCase):
         self.context.close()
 
     def set_reports_path(self, path):
-        self.context.os.environ['reports_path'] = path
+        self.context.os.environ["reports_path"] = path
 
     def test_saves_report_contents(self):
         content = "I'm glad I'm not an Oscar Meyer Weiner"
@@ -59,7 +55,7 @@ class TestReportSaving(TestCase):
         expect(self.fake_file.written).to(equal(content))
 
     def test_saves_report_to_configured_reports_directory(self):
-        expected = '/spam/eggs/sausage/spam'
+        expected = "/spam/eggs/sausage/spam"
         self.set_reports_path(expected)
         publish()
         actual, _ = os.path.split(self.fake_file.filename)
@@ -71,7 +67,7 @@ class TestReportSaving(TestCase):
         return calls[0]
 
     def test_creates_full_path_to_reports_directory(self):
-        expected = '/biggles/all/the/way/down/'
+        expected = "/biggles/all/the/way/down/"
         self.set_reports_path(expected)
         publish()
         args, kwargs = self.extract_makedirs_call()
@@ -80,18 +76,18 @@ class TestReportSaving(TestCase):
     def test_creates_path_with_exist_ok(self):
         publish()
         args, kwargs = self.extract_makedirs_call()
-        expect(kwargs).to(contain_key_with_value('exist_ok', True))
+        expect(kwargs).to(contain_key_with_value("exist_ok", True))
 
     def test_creates_file_with_specified_name(self):
-        expected = 'susan.ann'
+        expected = "susan.ann"
         publish(filename=expected)
         _, actual = os.path.split(self.fake_file.filename)
         expect(actual).to(equal(expected))
 
     def test_opens_report_file_in_write_mode(self):
         publish()
-        expect(self.fake_file.mode).to(equal('w'))
+        expect(self.fake_file.mode).to(equal("w"))
 
 
-if '__main__' == __name__:
+if "__main__" == __name__:
     main()

@@ -4,10 +4,9 @@ from questions_three.vanilla import Structure
 
 
 class GraphqlResponse:
-
     def __init__(self, requests_response):
         if not isinstance(requests_response, requests.Response):
-            raise TypeError('Refusing to work until given a requests.Response')
+            raise TypeError("Refusing to work until given a requests.Response")
         self.http_response = requests_response
 
     @property

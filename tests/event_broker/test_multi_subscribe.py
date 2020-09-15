@@ -10,23 +10,21 @@ from questions_three.event_broker import EventBroker
 
 
 class TestMultiSubscribe(TestCase):
-
     def tearDown(self):
         EventBroker.reset()
 
     def test_requires_event_or_events(self):
-        expect(
-            partial(EventBroker.subscribe, func=lambda **k: None)).to(
-                complain(TypeError))
+        expect(partial(EventBroker.subscribe, func=lambda **k: None)).to(complain(TypeError))
 
     def test_event_and_events_are_mutually_exclusive(self):
         expect(
             partial(
-                EventBroker.subscribe, event=TestEvent.test_started,
+                EventBroker.subscribe,
+                event=TestEvent.test_started,
                 events=(TestEvent.test_ended, TestEvent.test_erred),
-                func=lambda **k: None)
-            ).to(
-            complain(TypeError))
+                func=lambda **k: None,
+            )
+        ).to(complain(TypeError))
 
     def test_subscribes_to_first(self):
         all_events = list(TestEvent)
@@ -59,8 +57,8 @@ class TestMultiSubscribe(TestCase):
         spy = FunctionSpy()
         EventBroker.subscribe(events=events, func=spy)
         EventBroker.publish(event=published)
-        expect(spy['event']).to(equal(published))
+        expect(spy["event"]).to(equal(published))
 
 
-if '__main__' == __name__:
+if "__main__" == __name__:
     main()

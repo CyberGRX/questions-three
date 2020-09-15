@@ -11,10 +11,8 @@ from questions_three.http_client import HttpClient
 
 
 class TestResponseReceived(TestCase):
-
     def setUp(self):
-        self.context = open_dependency_context(
-            supply_env=True, supply_logging=True)
+        self.context = open_dependency_context(supply_env=True, supply_logging=True)
 
     def tearDown(self):
         self.context.close()
@@ -30,12 +28,10 @@ class TestResponseReceived(TestCase):
         requests_stub = EndlessFake()
         requests_stub.post = lambda *a, **k: planted_response
         self.context.inject(requests, requests_stub)
-        EventBroker.subscribe(
-            event=TestEvent.http_response_received,
-            func=subscriber)
-        HttpClient().post('http://something')
+        EventBroker.subscribe(event=TestEvent.http_response_received, func=subscriber)
+        HttpClient().post("http://something")
         expect(published_response).to(be(planted_response))
 
 
-if '__main__' == __name__:
+if "__main__" == __name__:
     main()

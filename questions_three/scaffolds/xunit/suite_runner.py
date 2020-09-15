@@ -1,17 +1,14 @@
 from questions_three.constants import TestEvent
 from questions_three.exceptions import TestSkipped
 from questions_three.event_broker import EventBroker
-from questions_three.scaffolds.common.activate_reporters \
-    import activate_reporters
-from questions_three.scaffolds.common.configure_logging \
-    import configure_logging
+from questions_three.scaffolds.common.activate_reporters import activate_reporters
+from questions_three.scaffolds.common.configure_logging import configure_logging
 
 from .runnable_suite import RunnableSuite
 from .test_runner import TestRunner
 
 
 class SuiteRunner:
-
     def __init__(self, suite_name, suite_attributes):
         self.suite_name = suite_name
         self.suite_attributes = suite_attributes
@@ -19,9 +16,7 @@ class SuiteRunner:
         activate_reporters()
 
     def discover_tests(self):
-        return [
-            k for k, v in self.suite_attributes.items()
-            if k.startswith('test')]
+        return [k for k, v in self.suite_attributes.items() if k.startswith("test")]
 
     def publish(self, event, **kwargs):
         EventBroker.publish(event=event, suite_name=self.suite_name, **kwargs)
@@ -40,20 +35,15 @@ class SuiteRunner:
             suite_erred = True
         for test_name in self.discover_tests():
             if suite_erred:
-                self.publish(
-                    TestEvent.test_skipped, test_name=test_name,
-                    exception=TestSkipped('Suite setup failed'))
+                self.publish(TestEvent.test_skipped, test_name=test_name, exception=TestSkipped("Suite setup failed"))
             elif suite_skipped_exception:
-                self.publish(
-                    TestEvent.test_skipped, test_name=test_name,
-                    exception=suite_skipped_exception)
+                self.publish(TestEvent.test_skipped, test_name=test_name, exception=suite_skipped_exception)
             else:
                 TestRunner(
                     suite_name=self.suite_name,
-                    suite_attributes=dict(
-                        self.suite_attributes,
-                        **stateful_suite.get_suite_context()),
-                    test_name=test_name).run()
+                    suite_attributes=dict(self.suite_attributes, **stateful_suite.get_suite_context()),
+                    test_name=test_name,
+                ).run()
         try:
             if not suite_skipped_exception:
                 stateful_suite.teardown_suite()

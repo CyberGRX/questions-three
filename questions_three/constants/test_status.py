@@ -9,4 +9,5 @@ TestStatus = Enum(
     passed
     running
     skipped
-    """)
+    """,
+)

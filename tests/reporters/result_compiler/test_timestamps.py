@@ -12,13 +12,11 @@ from twin_sister.fakes import FakeDatetime
 
 
 def start_suite():
-    EventBroker.publish(
-        event=TestEvent.suite_started, suite_name='spam')
+    EventBroker.publish(event=TestEvent.suite_started, suite_name="spam")
 
 
 def end_suite():
-    EventBroker.publish(
-        event=TestEvent.suite_ended, suite_name='spam')
+    EventBroker.publish(event=TestEvent.suite_ended, suite_name="spam")
 
 
 @contextmanager
@@ -29,25 +27,20 @@ def test_suite():
 
 
 def start_test():
-    EventBroker.publish(
-        event=TestEvent.test_started, test_name='spam')
+    EventBroker.publish(event=TestEvent.test_started, test_name="spam")
 
 
 def end_test():
-    EventBroker.publish(
-        event=TestEvent.test_ended, test_name='spam')
+    EventBroker.publish(event=TestEvent.test_ended, test_name="spam")
 
 
 class TestTimestamps(TestCase):
-
     def setUp(self):
         self.context = open_dependency_context()
         self.fake_time = FakeDatetime()
         self.context.inject(datetime, self.fake_time)
         self.results = None
-        EventBroker.subscribe(
-            event=TestEvent.suite_results_compiled,
-            func=self.capture_results)
+        EventBroker.subscribe(event=TestEvent.suite_results_compiled, func=self.capture_results)
         self.sut = ResultCompiler()
         self.sut.activate()
 
@@ -98,5 +91,5 @@ class TestTimestamps(TestCase):
         expect(self.results.suite_end_time).to(equal(expected))
 
 
-if '__main__' == __name__:
+if "__main__" == __name__:
     main()

@@ -21,7 +21,6 @@ class EggsException(RuntimeError):
 
 
 class TestCallWithExceptionTolerance(TestCase):
-
     def setUp(self):
         self.context = open_dependency_context()
 
@@ -36,16 +35,14 @@ class TestCallWithExceptionTolerance(TestCase):
         def func():
             nonlocal calls
             calls += 1
-            raise SpamException('intentional')
+            raise SpamException("intentional")
 
         def do_it():
-            call_with_exception_tolerance(
-                func=func, tolerate=SpamException,
-                timeout=timeout, throttle=throttle)
+            call_with_exception_tolerance(func=func, tolerate=SpamException, timeout=timeout, throttle=throttle)
 
         tc = TimeController(target=do_it)
         tc.start()
-        tc.advance(seconds=timeout-0.01)
+        tc.advance(seconds=timeout - 0.01)
         last_check = calls
         sleep(2 * throttle)
         expect(calls).to(be_above(last_check))
@@ -54,25 +51,22 @@ class TestCallWithExceptionTolerance(TestCase):
         expected = 21345
 
         expect(
-            call_with_exception_tolerance(
-                func=lambda: expected, tolerate=SpamException,
-                timeout=0.01, throttle=0)
-            ).to(equal(expected))
+            call_with_exception_tolerance(func=lambda: expected, tolerate=SpamException, timeout=0.01, throttle=0)
+        ).to(equal(expected))
 
     def test_re_raises_after_timeout(self):
         exception_class = SpamException
 
         def func():
-            raise exception_class('intentional')
+            raise exception_class("intentional")
 
         def do_it():
-            call_with_exception_tolerance(
-                func=func, tolerate=SpamException, timeout=0.001, throttle=0)
+            call_with_exception_tolerance(func=func, tolerate=SpamException, timeout=0.001, throttle=0)
 
         expect(do_it).to(raise_ex(exception_class))
 
     def test_raises_unspecified_exception_immediately(self):
-        e = EggsException('intentional')
+        e = EggsException("intentional")
         calls = 0
 
         def func():
@@ -81,8 +75,7 @@ class TestCallWithExceptionTolerance(TestCase):
             raise e
 
         try:
-            call_with_exception_tolerance(
-                func=func, tolerate=SpamException, timeout=0.01, throttle=0)
+            call_with_exception_tolerance(func=func, tolerate=SpamException, timeout=0.01, throttle=0)
         except EggsException:
             pass  # expected
         expect(calls).to(equal(1))
@@ -93,11 +86,10 @@ class TestCallWithExceptionTolerance(TestCase):
         def func():
             nonlocal calls
             calls += 1
-            raise SonOfSpamException('intentional')
+            raise SonOfSpamException("intentional")
 
         try:
-            call_with_exception_tolerance(
-                func=func, tolerate=SpamException, timeout=0.01, throttle=0)
+            call_with_exception_tolerance(func=func, tolerate=SpamException, timeout=0.01, throttle=0)
         except SonOfSpamException:
             pass  # expected
         expect(calls).to(be_above(1))
@@ -111,13 +103,13 @@ class TestCallWithExceptionTolerance(TestCase):
             slept_for = n
 
         def complain():
-            raise SpamException('intentional')
+            raise SpamException("intentional")
 
         self.context.inject(sleep, sleep_spy)
         try:
             call_with_exception_tolerance(
-                func=complain, tolerate=SpamException,
-                timeout=throttle*5, throttle=throttle)
+                func=complain, tolerate=SpamException, timeout=throttle * 5, throttle=throttle
+            )
         except SpamException:
             pass
         expect(slept_for).to(equal(throttle))
@@ -131,9 +123,7 @@ class TestCallWithExceptionTolerance(TestCase):
             raise EggsException()
 
         try:
-            call_with_exception_tolerance(
-                func=attempt, tolerate=(SpamException,),
-                timeout=0.05, throttle=0)
+            call_with_exception_tolerance(func=attempt, tolerate=(SpamException,), timeout=0.05, throttle=0)
         except EggsException:
             pass
         expect(iterations).to(equal(1))
@@ -148,8 +138,8 @@ class TestCallWithExceptionTolerance(TestCase):
 
         try:
             call_with_exception_tolerance(
-                func=attempt, tolerate=(SpamException, EggsException),
-                timeout=0.05, throttle=0)
+                func=attempt, tolerate=(SpamException, EggsException), timeout=0.05, throttle=0
+            )
         except SpamException:
             pass
         expect(iterations).to(be_above(1))
@@ -164,8 +154,8 @@ class TestCallWithExceptionTolerance(TestCase):
 
         try:
             call_with_exception_tolerance(
-                func=attempt, tolerate=[SpamException, EggsException],
-                timeout=0.05, throttle=0)
+                func=attempt, tolerate=[SpamException, EggsException], timeout=0.05, throttle=0
+            )
         except EggsException:
             pass
         expect(iterations).to(be_above(1))
@@ -180,12 +170,12 @@ class TestCallWithExceptionTolerance(TestCase):
 
         try:
             call_with_exception_tolerance(
-                func=attempt, tolerate=(SpamException, EggsException),
-                timeout=0.05, throttle=0)
+                func=attempt, tolerate=(SpamException, EggsException), timeout=0.05, throttle=0
+            )
         except SonOfSpamException:
             pass
         expect(iterations).to(be_above(1))
 
 
-if '__main__' == __name__:
+if "__main__" == __name__:
     main()

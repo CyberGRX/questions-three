@@ -7,7 +7,6 @@ from questions_three.scaffolds.common import skip
 
 
 class TestSkip(TestCase):
-
     def test_raises_test_skipped(self):
         expect(skip).to(raise_error(TestSkipped))
 
@@ -15,10 +14,10 @@ class TestSkip(TestCase):
         expected = "Why on earth would you want to do that?"
         try:
             skip(expected)
-            assert False, 'No exception was raised'
+            assert False, "No exception was raised"
         except TestSkipped as e:
             expect(str(e)).to(contain(expected))
 
 
-if '__main__' == __name__:
+if "__main__" == __name__:
     main()

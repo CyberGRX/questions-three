@@ -6,6 +6,4 @@ BASE36_CHARS = digits + ascii_lowercase
 
 
 def random_base36_string(length):
-    return ''.join([
-        BASE36_CHARS[randint(0, len(BASE36_CHARS)-1)]
-        for n in range(length)])
+    return "".join([BASE36_CHARS[randint(0, len(BASE36_CHARS) - 1)] for n in range(length)])

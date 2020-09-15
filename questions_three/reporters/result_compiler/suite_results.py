@@ -1,5 +1,4 @@
 class TestResult:
-
     def __init__(self, test_name):
         self.artifacts = []
         self.end_time = None
@@ -10,7 +9,6 @@ class TestResult:
 
 
 class SuiteResults:
-
     def __init__(self):
         self.artifacts = []
         self.suite_end_time = None

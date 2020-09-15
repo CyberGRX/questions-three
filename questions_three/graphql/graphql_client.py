@@ -5,7 +5,6 @@ from .graphql_response import GraphqlResponse
 
 
 class GraphqlClient:
-
     def __init__(self, *, http_client, url):
         self.http_client = http_client
         self.url = url
@@ -19,9 +18,9 @@ class GraphqlClient:
         """
         response = self.http_client.post(
             url=self.url,
-            headers={'Content-Type': 'application/json'},
-            data=(json.dumps({'query': operation, 'variables': variables}))
+            headers={"Content-Type": "application/json"},
+            data=(json.dumps({"query": operation, "variables": variables})),
         )
-        if 'errors' in response.json().keys():
+        if "errors" in response.json().keys():
             raise OperationFailed(requests_response=response)
         return GraphqlResponse(response)

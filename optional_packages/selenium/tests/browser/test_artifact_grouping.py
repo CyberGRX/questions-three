@@ -22,15 +22,12 @@ class FakeWebdriver(EndlessFake):
 
 
 class TestArtifactGrouping(TestCase):
-
     def setUp(self):
         self.context = open_dependency_context(supply_env=True)
         fake_webdriver = FakeWebdriver()
         self.context.inject(webdriver, fake_webdriver)
         self.events_captured = []
-        EventBroker.subscribe(
-            event=TestEvent.artifact_created,
-            func=self.capture_event)
+        EventBroker.subscribe(event=TestEvent.artifact_created, func=self.capture_event)
         self.sut = Browser()
 
     def tearDown(self):
@@ -40,10 +37,7 @@ class TestArtifactGrouping(TestCase):
         self.events_captured.append(kwargs)
 
     def extract_artifact_groups(self):
-        return [
-            e['artifact_group']
-            for e in self.events_captured
-            if 'artifact_group' in e.keys()]
+        return [e["artifact_group"] for e in self.events_captured if "artifact_group" in e.keys()]
 
     def test_all_artifacts_from_same_event_have_same_group(self):
         EventBroker.publish(event=TestEvent.test_failed)
@@ -58,5 +52,5 @@ class TestArtifactGrouping(TestCase):
         expect(groups).to(have_length(events))
 
 
-if '__main__' == __name__:
+if "__main__" == __name__:
     main()

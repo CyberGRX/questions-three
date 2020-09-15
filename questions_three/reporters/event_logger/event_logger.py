@@ -6,18 +6,14 @@ from questions_three.vanilla import format_exception
 
 
 class EventLogger:
-
     def __init__(self):
         self._log = dependency(logger_for_module)(__name__)
 
     def activate(self):
         subscribe_event_handlers(self)
 
-    def on_sample_measured(
-             self, test_name, sample_parameters, sample_execution_seconds,
-            **kwargs):
-        self._log.info(
-            f'{test_name} completed in {sample_execution_seconds} seconds')
+    def on_sample_measured(self, test_name, sample_parameters, sample_execution_seconds, **kwargs):
+        self._log.info(f"{test_name} completed in {sample_execution_seconds} seconds")
 
     def on_suite_ended(self, suite_name, **kwargs):
         self._log.info('Suite "%s" ended' % suite_name)

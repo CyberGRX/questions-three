@@ -1,17 +1,14 @@
-
 from unittest import TestCase, main
 
 from expects import expect, equal
 from twin_sister import open_dependency_context
 
 from questions_three.exceptions import TestSkipped
-from questions_three.scaffolds \
-    import disable_default_reporters, enable_default_reporters
+from questions_three.scaffolds import disable_default_reporters, enable_default_reporters
 from questions_three.scaffolds.xunit import TestSuite
 
 
 class TestExecution(TestCase):
-
     def setUp(self):
         self.context = open_dependency_context(supply_logging=True)
         disable_default_reporters()
@@ -25,12 +22,12 @@ class TestExecution(TestCase):
 
         def wrapper():
             class Suite(TestSuite):
-
                 def setup_suite(self):
                     nonlocal ran
                     ran = True
+
         wrapper()
-        assert ran, 'Setup did not run'
+        assert ran, "Setup did not run"
 
     def test_makes_suite_setup_variables_available_to_tests(self):
         expected = 4588
@@ -38,7 +35,6 @@ class TestExecution(TestCase):
 
         def wrapper():
             class Suite(TestSuite):
-
                 def setup_suite(self):
                     self.thing = expected
 
@@ -54,12 +50,12 @@ class TestExecution(TestCase):
 
         def wrapper():
             class Suite(TestSuite):
-
                 def teardown_suite(self):
                     nonlocal ran
                     ran = True
+
         wrapper()
-        assert ran, 'Teardown did not run'
+        assert ran, "Teardown did not run"
 
     def test_executes_teardown_suite_if_setup_suite_fails(self):
         ran = False
@@ -67,13 +63,14 @@ class TestExecution(TestCase):
         def wrapper():
             class Suite(TestSuite):
                 def setup_suite(self):
-                    raise RuntimeError('intentional')
+                    raise RuntimeError("intentional")
 
                 def teardown_suite(self):
                     nonlocal ran
                     ran = True
+
         wrapper()
-        assert ran, 'Teardown did not run'
+        assert ran, "Teardown did not run"
 
     def test_executes_teardown_suite_if_test_fails(self):
         ran = False
@@ -81,13 +78,14 @@ class TestExecution(TestCase):
         def wrapper():
             class Suite(TestSuite):
                 def test_boom(self):
-                    raise AssertionError('intentional')
+                    raise AssertionError("intentional")
 
                 def teardown_suite(self):
                     nonlocal ran
                     ran = True
+
         wrapper()
-        assert ran, 'Suite teardown did not run'
+        assert ran, "Suite teardown did not run"
 
     def test_executes_first_test(self):
         ran = False
@@ -97,8 +95,9 @@ class TestExecution(TestCase):
                 def test_spam(self):
                     nonlocal ran
                     ran = True
+
         wrapper()
-        assert ran, 'Test did not run'
+        assert ran, "Test did not run"
 
     def test_does_not_execute_non_test(self):
         ran = False
@@ -108,8 +107,9 @@ class TestExecution(TestCase):
                 def bestest(self):
                     nonlocal ran
                     ran = True
+
         wrapper()
-        assert not ran, 'Non-test ran'
+        assert not ran, "Non-test ran"
 
     def test_executes_second_test(self):
         ran = False
@@ -122,8 +122,9 @@ class TestExecution(TestCase):
                 def test_two(self):
                     nonlocal ran
                     ran = True
+
         wrapper()
-        assert ran, 'Second test did not run'
+        assert ran, "Second test did not run"
 
     def test_loses_state_between_tests(self):
         found = None
@@ -140,7 +141,7 @@ class TestExecution(TestCase):
 
                 def test_two(self):
                     nonlocal found
-                    if 'thing' in dir(self):
+                    if "thing" in dir(self):
                         found = self.thing
                     else:
                         found = initial_value
@@ -165,8 +166,9 @@ class TestExecution(TestCase):
                 def test_last(self):
                     nonlocal ran
                     ran = True
+
         wrapper()
-        assert ran, 'Last test did not run'
+        assert ran, "Last test did not run"
 
     def test_runs_next_test_if_test_fails(self):
         ran = False
@@ -174,19 +176,20 @@ class TestExecution(TestCase):
         def wrapper():
             class Suite(TestSuite):
                 def test_one(self):
-                    raise AssertionError('oops')
+                    raise AssertionError("oops")
 
                 def test_two(self):
-                    raise AssertionError('oops')
+                    raise AssertionError("oops")
 
                 def test_three(self):
-                    raise AssertionError('oops')
+                    raise AssertionError("oops")
 
                 def test_last(self):
                     nonlocal ran
                     ran = True
+
         wrapper()
-        assert ran, 'Test did not run'
+        assert ran, "Test did not run"
 
     def test_runs_next_test_if_test_errs(self):
         ran = False
@@ -194,19 +197,20 @@ class TestExecution(TestCase):
         def wrapper():
             class Suite(TestSuite):
                 def test_one(self):
-                    raise RuntimeError('oops')
+                    raise RuntimeError("oops")
 
                 def test_two(self):
-                    raise RuntimeError('oops')
+                    raise RuntimeError("oops")
 
                 def test_three(self):
-                    raise RuntimeError('oops')
+                    raise RuntimeError("oops")
 
                 def test_last(self):
                     nonlocal ran
                     ran = True
+
         wrapper()
-        assert ran, 'Test did not run'
+        assert ran, "Test did not run"
 
     def test_runs_next_test_if_test_skips(self):
         ran = False
@@ -214,87 +218,83 @@ class TestExecution(TestCase):
         def wrapper():
             class Suite(TestSuite):
                 def test_one(self):
-                    raise TestSkipped('oops')
+                    raise TestSkipped("oops")
 
                 def test_two(self):
-                    raise TestSkipped('oops')
+                    raise TestSkipped("oops")
 
                 def test_three(self):
-                    raise TestSkipped('oops')
+                    raise TestSkipped("oops")
 
                 def test_last(self):
                     nonlocal ran
                     ran = True
+
         wrapper()
-        assert ran, 'Test did not run'
+        assert ran, "Test did not run"
 
     def test_executes_setup_before_each_test(self):
         events = []
 
         def wrapper():
-
             class Suite(TestSuite):
                 def setup(self):
                     nonlocal events
-                    events.append('setup')
+                    events.append("setup")
 
                 def test1(self):
-                    events.append('test')
+                    events.append("test")
 
                 test2 = test1
                 test3 = test1
 
         wrapper()
-        expect(events).to(equal(
-            ['setup', 'test', 'setup', 'test', 'setup', 'test']))
+        expect(events).to(equal(["setup", "test", "setup", "test", "setup", "test"]))
 
     def test_executes_teardown_after_passing_test(self):
         events = []
 
         def wrapper():
-
             class Suite(TestSuite):
-
                 def test1(self):
-                    events.append('test')
+                    events.append("test")
 
                 def teardown(self):
-                    events.append('teardown')
+                    events.append("teardown")
+
         wrapper()
-        expect(events).to(equal(['test', 'teardown']))
+        expect(events).to(equal(["test", "teardown"]))
 
     def test_executes_teardown_after_failing_test(self):
         events = []
 
         def wrapper():
-
             class Suite(TestSuite):
-
                 def test1(self):
-                    events.append('test')
-                    raise AssertionError('intentional')
+                    events.append("test")
+                    raise AssertionError("intentional")
 
                 def teardown(self):
-                    events.append('teardown')
+                    events.append("teardown")
+
         wrapper()
-        expect(events).to(equal(['test', 'teardown']))
+        expect(events).to(equal(["test", "teardown"]))
 
     def test_executes_teardown_after_skipped_test(self):
         events = []
 
         def wrapper():
-
             class Suite(TestSuite):
-
                 def test1(self):
-                    events.append('test')
-                    raise RuntimeError('intentional')
+                    events.append("test")
+                    raise RuntimeError("intentional")
 
                 def teardown(self):
-                    events.append('teardown')
+                    events.append("teardown")
+
         wrapper()
-        expect(events).to(equal(['test', 'teardown']))
+        expect(events).to(equal(["test", "teardown"]))
 
 
-if '__main__' == __name__:
+if "__main__" == __name__:
     main()

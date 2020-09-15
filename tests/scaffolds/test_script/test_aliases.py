@@ -7,7 +7,6 @@ from questions_three.scaffolds.test_script import test, test_suite
 
 
 class TestAliases(TestCase):
-
     def test_check_suite(self):
         expect(check_suite).to(be(test_suite))
 
@@ -15,5 +14,5 @@ class TestAliases(TestCase):
         expect(check).to(be(test))
 
 
-if '__main__' == __name__:
+if "__main__" == __name__:
     main()

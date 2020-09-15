@@ -18,4 +18,5 @@ TestEvent = Enum(
     test_erred
     test_skipped
     test_started
-    """)
+    """,
+)

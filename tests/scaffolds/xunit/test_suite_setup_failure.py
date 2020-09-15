@@ -4,18 +4,15 @@ from unittest import TestCase, main
 from expects import expect, equal
 from twin_sister import open_dependency_context
 
-from questions_three.event_broker import EventBroker, \
-    subscribe_event_handlers
+from questions_three.event_broker import EventBroker, subscribe_event_handlers
 from questions_three.scaffolds.xunit import TestSuite
 from twin_sister.fakes import EmptyFake
 
 
 def run_suite():
-
     class Suite(TestSuite):
-
         def setup_suite(self):
-            raise RuntimeError('I got the boogie fever')
+            raise RuntimeError("I got the boogie fever")
 
         def test_one(self):
             pass
@@ -35,8 +32,7 @@ class TestSuiteSetupFailure(TestCase):
     """
 
     def setUp(self):
-        self.context = open_dependency_context(
-            supply_fs=True, supply_logging=True)
+        self.context = open_dependency_context(supply_fs=True, supply_logging=True)
         self.context.inject(StreamHandler, EmptyFake())
         EventBroker.reset()
         subscribe_event_handlers(self)
@@ -53,5 +49,5 @@ class TestSuiteSetupFailure(TestCase):
         expect(self.skip_events).to(equal(3))  # number of tests
 
 
-if '__main__' == __name__:
+if "__main__" == __name__:
     main()

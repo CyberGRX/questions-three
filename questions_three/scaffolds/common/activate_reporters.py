@@ -11,8 +11,7 @@ from questions_three.reporters.junit_reporter import JunitReporter
 from questions_three.reporters.result_compiler import ResultCompiler
 
 
-BUILT_IN_REPORTERS = (
-    ArtifactSaver, EventLogger, JunitReporter, ResultCompiler)
+BUILT_IN_REPORTERS = (ArtifactSaver, EventLogger, JunitReporter, ResultCompiler)
 
 _active_reporters = []
 
@@ -27,23 +26,18 @@ def custom_reporter_filename():
 def custom_reporter_class_names():
     filename = custom_reporter_filename()
     if filename:
-        with dependency(open)(filename, 'r') as f:
-            return [
-                line
-                for line in [l.strip() for l in f.read().split('\n')]
-                if line and not line.startswith('#')]
+        with dependency(open)(filename, "r") as f:
+            return [line for line in [l.strip() for l in f.read().split("\n")] if line and not line.startswith("#")]
     return []
 
 
-MODULE_AND_CLASS_PATTERN = re.compile(r'^(.*?)\.([^\.]+)$')
+MODULE_AND_CLASS_PATTERN = re.compile(r"^(.*?)\.([^\.]+)$")
 
 
 def import_class(full_name):
     mat = MODULE_AND_CLASS_PATTERN.match(full_name)
     if not mat:
-        raise InvalidConfiguration(
-            'Failed to parse line in %s: "%s"'
-            % (custom_reporter_filename(), full_name))
+        raise InvalidConfiguration('Failed to parse line in %s: "%s"' % (custom_reporter_filename(), full_name))
     module_name, class_name = mat.groups()
     module = dependency(importlib).import_module(module_name)
     return getattr(module, class_name)
@@ -51,11 +45,8 @@ def import_class(full_name):
 
 def configured_reporters():
     conf = config_for_module(__name__)
-    configured_names = conf.event_reporters.split(',')
-    return [
-        cls for cls in BUILT_IN_REPORTERS
-        if cls.__name__ in configured_names
-    ]
+    configured_names = conf.event_reporters.split(",")
+    return [cls for cls in BUILT_IN_REPORTERS if cls.__name__ in configured_names]
 
 
 def custom_reporters():

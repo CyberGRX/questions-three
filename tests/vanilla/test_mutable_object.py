@@ -6,10 +6,9 @@ from questions_three.vanilla import MutableObject
 
 
 class TestMutableObject(TestCase):
-
     def test_object_is_mutable(self):
         thing = MutableObject()
-        name = 'ximinez'
+        name = "ximinez"
         value = 77
 
         def attempt():
@@ -19,5 +18,5 @@ class TestMutableObject(TestCase):
         expect(getattr(thing, name)).to(equal(value))
 
 
-if '__main__' == __name__:
+if "__main__" == __name__:
     main()

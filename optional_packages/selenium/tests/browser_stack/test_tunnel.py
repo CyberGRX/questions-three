@@ -30,17 +30,14 @@ class TunnelToNowhere(BrowserStackTunnel):
 
 
 class TestTunnel(TestCase):
-
     def setUp(self):
         self.context = open_dependency_context(supply_env=True, supply_fs=True)
         self.context.inject(webdriver, EndlessFake())
         self.fake_tunnel_class = MasterSpy(EndlessFake())
-        self.context.inject(
-            BrowserStackTunnel, self.fake_tunnel_class)
+        self.context.inject(BrowserStackTunnel, self.fake_tunnel_class)
         self.context.set_env(
-            browserstack_access_key='whatever',
-            browserstack_url='gopher:hahah',
-            browserstack_username='biggles')
+            browserstack_access_key="whatever", browserstack_url="gopher:hahah", browserstack_username="biggles"
+        )
 
     def tearDown(self):
         self.context.close()
@@ -49,42 +46,34 @@ class TestTunnel(TestCase):
         return bool(self.fake_tunnel_class.call_history)
 
     def test_opens_tunnel_on_suite_start_when_expected(self):
-        self.context.set_env(
-            browser_location='BrowserStack',
-            browserstack_set_local='true')
+        self.context.set_env(browser_location="BrowserStack", browserstack_set_local="true")
         Browser()
-        assert self.tunnel_was_opened(), 'Tunnel was not opened'
+        assert self.tunnel_was_opened(), "Tunnel was not opened"
 
     def test_does_not_open_tunnel_if_not_using_browserstack(self):
-        self.context.set_env(
-            browser_location='Spain',
-            browserstack_set_local='true')
+        self.context.set_env(browser_location="Spain", browserstack_set_local="true")
         Browser()
-        assert not self.tunnel_was_opened(), 'Tunnel was opened'
+        assert not self.tunnel_was_opened(), "Tunnel was opened"
 
     def test_does_not_open_tunnel_if_local_flag_not_set(self):
-        self.context.set_env(browser_locaton='BrowserStack')
+        self.context.set_env(browser_locaton="BrowserStack")
         Browser()
-        assert not self.tunnel_was_opened(), 'Tunnel was opened'
+        assert not self.tunnel_was_opened(), "Tunnel was opened"
 
     def test_does_not_open_tunnel_if_local_flag_is_false(self):
-        self.context.set_env(
-            browser_locaton='BrowserStack',
-            BROWSERSTACK_SET_LOCAL='fAlsE')
+        self.context.set_env(browser_locaton="BrowserStack", BROWSERSTACK_SET_LOCAL="fAlsE")
         Browser()
-        assert not self.tunnel_was_opened(), 'Tunnel was opened'
+        assert not self.tunnel_was_opened(), "Tunnel was opened"
 
     def test_closes_tunnel_on_suite_end(self):
-        self.context.set_env(
-            browser_locaton='BrowserStack',
-            BROWSERSTACK_SET_LOCAL='true')
+        self.context.set_env(browser_locaton="BrowserStack", BROWSERSTACK_SET_LOCAL="true")
         spy = MasterSpy(TunnelToNowhere())
         self.context.inject_as_class(BrowserStackTunnel, spy)
         sut = Browser()  # noqa: F841
-        assert not spy.was_closed,  'close was called prematurely.'
+        assert not spy.was_closed, "close was called prematurely."
         EventBroker.publish(event=TestEvent.suite_ended)
-        assert spy.was_closed, 'close was not called.'
+        assert spy.was_closed, "close was not called."
 
 
-if '__main__' == __name__:
+if "__main__" == __name__:
     main()

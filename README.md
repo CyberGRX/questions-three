@@ -8,7 +8,7 @@
 
 
 ## Why you want this
-The vast majority of support for automated <a href="#heretical-terminology">software checking</a> falls into two main groups: low-level unit checking tools that guide design and maintain control over code as it is being written, and <a href="https://medium.com/better-programming/waiter-theres-a-database-in-my-unit-test-9698d866102e">high-level system checking</a> tools that reduce the workload of human testers after the units have been integrated.  
+The vast majority of support for automated <a href="#heretical-terminology">software checking</a> falls into two main groups: low-level unit checking tools that guide design and maintain control over code as it is being written, and <a href="https://medium.com/better-programming/waiter-theres-a-database-in-my-unit-test-9698d866102e">high-level system checking</a> tools that reduce the workload of human testers after the units have been integrated.
 
 The first group is optimized for precision and speed.  A good unit check proves exactly one point in milliseconds.  The second group is optimized for efficient use of human resources, enabling testers to repeat tedious actions without demanding much (or any) coding effort.
 
@@ -411,7 +411,7 @@ graphql_client.execute(your_important_query)
 ```
 
 `execute` is a neutral method that makes `POST` requests against your GraphQL endpoint for either Queries or Mutations.
-The first argument of `execute` is always the operation that you are trying to perform, and any key-word arguments 
+The first argument of `execute` is always the operation that you are trying to perform, and any key-word arguments
 afterwards are turned into your given variables.
 ```
 your_important_query = """
@@ -422,7 +422,7 @@ your_important_query = """
 graphql_client.execute(your_important_query, id='1234')
 ```
 
-Upon making your request (that does not result in an HTTP Error), you will either get a `GraphqlResponse` object, or 
+Upon making your request (that does not result in an HTTP Error), you will either get a `GraphqlResponse` object, or
 if you received errors in your response, an `OperationFailed` exception will be raised.
 - **GraphqlResponse** objects have the following:
   - `.http_response` property: The `requests.Response` object returned by the HTTP Client

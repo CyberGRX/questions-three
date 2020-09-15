@@ -135,7 +135,7 @@ At its core, Questions Three is [event-driven](https://en.wikipedia.org/wiki/Eve
 1. Take a DOM dump of itself
 1. Publish the DOM dump as an `ARTIFACT_CREATED` event
 
-By default, Questions Three activates a reporter called `ArtifactSaver`.  It subscribes to `ARTIFACT_CREATED` events and saves each artifact to the appropriate place under `reports`.  
+By default, Questions Three activates a reporter called `ArtifactSaver`.  It subscribes to `ARTIFACT_CREATED` events and saves each artifact to the appropriate place under `reports`.
 
 
 <a name="extra-find-methods"><h3>Extra find methods</h3></a>

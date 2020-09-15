@@ -23,5 +23,5 @@ def wait_for(func, *, timeout, throttle):
         if func():
             return
         if now() > expiry:
-            raise TimeoutError(f'Exceeded wait time of {timeout} seconds')
+            raise TimeoutError(f"Exceeded wait time of {timeout} seconds")
         sleep(throttle)

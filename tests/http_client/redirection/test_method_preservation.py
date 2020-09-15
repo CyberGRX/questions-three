@@ -9,7 +9,6 @@ from questions_three.http_client import HttpClient
 
 
 class FakeRequestsMethod:
-
     def __init__(self):
         self.already_redirected = False
         self.call_count = 0
@@ -21,18 +20,17 @@ class FakeRequestsMethod:
             response.status_code = 200
         else:
             response.status_code = 301
-            response.headers['Location'] = 'spam'
+            response.headers["Location"] = "spam"
             self.already_redirected = True
         return response
 
 
 class TestMethodPreservation(TestCase):
-
     def setUp(self):
         self.context = open_dependency_context()
         self.spies = MutableObject()
         requests_stub = EndlessFake(pattern_obj=requests)
-        for method in ('get', 'post', 'put', 'delete', 'head'):
+        for method in ("get", "post", "put", "delete", "head"):
             fake = FakeRequestsMethod()
             setattr(self.spies, method, fake)
             setattr(requests_stub, method, fake)
@@ -42,25 +40,25 @@ class TestMethodPreservation(TestCase):
         self.context.close()
 
     def check_method(self, method):
-        getattr(HttpClient(), method)('https://some-host')
+        getattr(HttpClient(), method)("https://some-host")
         spy = getattr(self.spies, method)
         expect(spy.call_count).to(equal(2))
 
     def test_preserves_get(self):
-        self.check_method('get')
+        self.check_method("get")
 
     def test_preserves_post(self):
-        self.check_method('post')
+        self.check_method("post")
 
     def test_preserves_put(self):
-        self.check_method('put')
+        self.check_method("put")
 
     def test_preserves_delete(self):
-        self.check_method('delete')
+        self.check_method("delete")
 
     def test_preserves_head(self):
-        self.check_method('head')
+        self.check_method("head")
 
 
-if '__main__' == __name__:
+if "__main__" == __name__:
     main()
