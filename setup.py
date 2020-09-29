@@ -9,7 +9,7 @@ from unittest.runner import TextTestRunner
 MAJOR_VERSION = 3
 # An even MINOR_VERSION number indicates a public release
 MINOR_VERSION = 14
-PATCH_VERSION = 1
+PATCH_VERSION = 2
 
 
 class Tester(test):
@@ -24,6 +24,13 @@ def build_number():
     if "BUILD_NUMBER" in os.environ.keys():
         return int(os.environ["BUILD_NUMBER"])
     return 0
+
+
+def requirements(f):
+    with open(f) as fd:
+        return [
+            l for l in [r.strip() for r in fd.readlines()] if l and not l.startswith("-") and not l.startswith("#")
+        ]
 
 
 with open("README.md", "r") as f:
@@ -43,18 +50,7 @@ setup(
     ],
     cmdclass={"test": Tester},
     description="Toolkit for building automated integration checks",
-    install_requires=[
-        "expects>=0.8.0",  # required by unit tests
-        "junit-xml==1.8",  # required by junit reporter. Fixed at version 1.8 because 1.9 introduces an interface change that causes the reporter to break.
-        "lxml>=4.1.1",  # required by html_form
-        "PyYAML>=5.1",  # required by ModuleConfig
-        "pyfakefs>=3.4.3",  # required by unit tests
-        "requests>=2.18.4",  # required by HTTP Client
-        "twin-sister>=4.2.6.0",  # required by unit tests
-        "twine>=1.9.1",  # required by setup to upload package to Nexus
-        "wheel>=0.30.0",  # required by setup to build package
-        "parameterized>=0.7.0",  # required by unit tests
-    ],
+    install_requires=requirements("requirements.txt"),
     long_description=long_description,
     long_description_content_type="text/markdown",
     name="questions-three",

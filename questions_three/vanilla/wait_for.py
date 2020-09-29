@@ -10,13 +10,13 @@ def now():
 
 def wait_for(func, *, timeout, throttle):
     """
-        Execute a function and retry if the return value is not truthy
-        func -- (callable) Execute this.
-        timeout -- (number) Raise TimeoutError after this number of seconds
-        throttle -- (number) Wait this number of seconds between retries
+    Execute a function and retry if the return value is not truthy
+    func -- (callable) Execute this.
+    timeout -- (number) Raise TimeoutError after this number of seconds
+    throttle -- (number) Wait this number of seconds between retries
 
-        Return whatever func returns
-        """
+    Return whatever func returns
+    """
     sleep = dependency(time.sleep)
     expiry = now() + timedelta(seconds=timeout)
     while True:
